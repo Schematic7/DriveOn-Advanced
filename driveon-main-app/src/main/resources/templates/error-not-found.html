@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Not Found - AutoService</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 100px; background-color: #f4f7f6;}
+        .error-box { background: white; padding: 40px; border-radius: 10px; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 5px solid #dc3545;}
+        h1 { color: #dc3545; }
+        .btn { display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;}
+    </style>
+</head>
+<body>
+<div class="error-box">
+    <h1>Oops! Something went wrong.</h1>
+    <p th:text="${errorMessage}">Error message goes here</p>
+
+    <a th:href="@{/}" class="btn">Back to Garage</a>
+</div>
+</body>
+</html>

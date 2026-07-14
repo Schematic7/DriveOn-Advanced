@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - All Appointments</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f8f9fa; }
+        h1 { color: #343a40; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6; }
+        th { background-color: #343a40; color: white; }
+        tr:hover { background-color: #f1f1f1; }
+        .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 15px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<a th:href="@{/}" class="back-btn">&larr; Back to Home</a>
+
+<h1>Manager Dashboard: All Appointments</h1>
+<p>Below is the list of all scheduled service appointments in the system.</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Date & Time</th>
+        <th>Client & Vehicle</th>
+        <th>Service Type</th>
+        <th>Notes</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="app : ${allAppointments}">
+        <td th:text="${#temporals.format(app.appointmentDate, 'dd-MMM-yyyy HH:mm')}" style="font-weight: bold;"></td>
+        <td th:text="${app.vehicleInfo}"></td>
+        <td th:text="${app.serviceName}"></td>
+        <td th:text="${app.notes ?: '-'}" style="max-width: 250px; font-style: italic; color: #555;"></td>
+        <td>
+            <span th:if="${app.status.name() == 'PENDING'}" style="background-color: #ffc107; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">PENDING</span>
+            <span th:if="${app.status.name() == 'APPROVED'}" style="background-color: #17a2b8; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">APPROVED</span>
+            <span th:if="${app.status.name() == 'COMPLETED'}" style="background-color: #28a745; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">COMPLETED</span>
+            <span th:if="${app.status.name() == 'CANCELLED'}" style="background-color: #dc3545; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">CANCELLED</span>
+        </td>
+        <td>
+            <form th:if="${app.status.name() == 'PENDING'}"
+                  th:action="@{/admin/appointments/approve/{id}(id=${app.id})}"
+                  th:method="POST" style="display:inline;">
+                <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                    Approve
+                </button>
+            </form>
+
+            <form th:if="${app.status.name() == 'APPROVED'}"
+                  th:action="@{/admin/appointments/complete/{id}(id=${app.id})}"
+                  th:method="POST" style="display:inline;">
+                <button type="submit" style="background-color: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                    Complete
+                </button>
+            </form>
+        </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(allAppointments)}">
+        <td colspan="6" style="text-align: center; color: #6c757d;">No appointments found in the system.</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

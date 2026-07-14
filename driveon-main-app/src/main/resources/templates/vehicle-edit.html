@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Vehicle - DriveOn Motors</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #444a60 0%, #2f3446 100%);
+            color: #edf2f4;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #1a1c23 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .navbar-brand { font-weight: 900; letter-spacing: 1.5px; font-size: 1.8rem; color: #ffffff !important; text-decoration: none;}
+        .brand-highlight { color: #e63946; }
+
+        .form-card {
+            background-color: #1a1c23;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            overflow: hidden;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .form-header {
+            background-color: #1a1c23;
+            color: #ffffff;
+            padding: 25px 30px;
+            border-bottom: 4px solid #e63946;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-header h4 {
+            margin: 0;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-body {
+            padding: 40px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #a0a5b5;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 15px;
+            background-color: #2b2d42;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus:not([readonly]) {
+            border-color: #e63946;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+            background-color: #35394a;
+        }
+
+        input[readonly] {
+            background-color: #1f212a;
+            color: #6c757d;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .error-message {
+            color: #ff4d4d;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            background-color: #e63946;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 14px 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover { background-color: #d90429; color: white;}
+
+        .btn-cancel {
+            background-color: transparent;
+            color: #a0a5b5;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 14px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .btn-cancel:hover { background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark py-3">
+    <div class="container-fluid px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/}">
+            DRIVE<span class="brand-highlight">ON</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link text-light fw-bold" th:href="@{/}">My Garage</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container flex-grow-1 d-flex justify-content-center align-items-center">
+    <div class="col-12 col-lg-8 col-xl-7">
+
+        <div class="form-card">
+            <div class="form-header">
+                <i class="fa-solid fa-pen-to-square fa-2x me-3 opacity-75"></i>
+                <h4>Edit Vehicle Details</h4>
+            </div>
+
+            <div class="form-body">
+                <form th:action="@{/vehicles/{id}/edit(id=${vehicleEditDTO.id})}" th:method="POST" th:object="${vehicleEditDTO}">
+
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="make">Make</label>
+                            <input type="text" id="make" th:field="*{make}" />
+                            <span th:if="${#fields.hasErrors('make')}" th:errors="*{make}" class="error-message">Make Error</span>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="model">Model</label>
+                            <input type="text" id="model" th:field="*{model}" />
+                            <span th:if="${#fields.hasErrors('model')}" th:errors="*{model}" class="error-message">Model Error</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="year">Year</label>
+                            <input type="number" id="year" th:field="*{year}" />
+                            <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}" class="error-message">Year Error</span>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="licensePlate">License Plate</label>
+                            <input type="text" id="licensePlate" th:field="*{licensePlate}" />
+                            <span th:if="${#fields.hasErrors('licensePlate')}" th:errors="*{licensePlate}" class="error-message">Plate Error</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label for="vin"><i class="fa-solid fa-lock me-1"></i> VIN Number</label>
+                        <input type="text" id="vin" th:field="*{vin}" readonly class="font-monospace text-uppercase" />
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <a th:href="@{/}" class="btn-cancel"><i class="fa-solid fa-arrow-left me-2"></i> Cancel</a>
+                        </div>
+                        <div class="col-md-8">
+                            <button type="submit" class="btn-submit"><i class="fa-solid fa-floppy-disk me-2"></i> Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
