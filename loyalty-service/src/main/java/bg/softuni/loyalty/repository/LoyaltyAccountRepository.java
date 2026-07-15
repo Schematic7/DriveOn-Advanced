@@ -1,6 +1,6 @@
-package bg.softuni.loyalty.service.repository;
+package bg.softuni.loyalty.repository;
 
-import bg.softuni.loyalty.service.model.entity.LoyaltyAccount;
+import bg.softuni.loyalty.model.entity.LoyaltyAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

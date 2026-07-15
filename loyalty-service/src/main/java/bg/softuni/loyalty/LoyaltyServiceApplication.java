@@ -1,4 +1,4 @@
-package bg.softuni.loyalty.service;
+package bg.softuni.loyalty;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

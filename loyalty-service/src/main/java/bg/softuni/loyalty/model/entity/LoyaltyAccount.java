@@ -1,4 +1,4 @@
-package bg.softuni.loyalty.service.model.entity;
+package bg.softuni.loyalty.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
