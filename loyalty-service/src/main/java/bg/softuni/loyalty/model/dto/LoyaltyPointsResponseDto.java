@@ -1,11 +1,13 @@
 package bg.softuni.loyalty.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AddPointsRequestDTO {
+@AllArgsConstructor
+public class LoyaltyPointsResponseDto {
     private String username;
-    private Double repairCost;
+    private Integer points;
 }
