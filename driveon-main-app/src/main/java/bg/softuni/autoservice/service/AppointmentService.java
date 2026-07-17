@@ -5,30 +5,40 @@ import bg.softuni.autoservice.exceptions.UnauthorizedActionException;
 import bg.softuni.autoservice.mapper.appointment.AppointmentMapper;
 import bg.softuni.autoservice.model.dto.appointment.AppointmentAddDTO;
 import bg.softuni.autoservice.model.dto.appointment.AppointmentViewDTO;
+import bg.softuni.autoservice.model.dto.loyalty.AddPointsRequestDto;
 import bg.softuni.autoservice.model.entity.Appointment;
 import bg.softuni.autoservice.model.entity.ServiceType;
 import bg.softuni.autoservice.model.entity.Vehicle;
 import bg.softuni.autoservice.repository.AppointmentRepository;
 import bg.softuni.autoservice.repository.ServiceTypeRepository;
 import bg.softuni.autoservice.repository.VehicleRepository;
+import bg.softuni.autoservice.service.client.LoyaltyClient;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
     private final VehicleRepository vehicleRepository;
     private final ServiceTypeRepository serviceTypeRepository;
+    private final LoyaltyClient loyaltyClient;
+
+    @Value("${loyalty.api.key}")
+    private String apiKey;
 
     public AppointmentService(AppointmentRepository appointmentRepository,
                               VehicleRepository vehicleRepository,
-                              ServiceTypeRepository serviceTypeRepository) {
+                              ServiceTypeRepository serviceTypeRepository, LoyaltyClient loyaltyClient) {
         this.appointmentRepository = appointmentRepository;
         this.vehicleRepository = vehicleRepository;
         this.serviceTypeRepository = serviceTypeRepository;
+        this.loyaltyClient = loyaltyClient;
     }
 
     public void createAppointment(AppointmentAddDTO dto, String username) {
@@ -98,5 +108,19 @@ public class AppointmentService {
 
         appointment.setStatus(bg.softuni.autoservice.model.enums.AppointmentStatus.COMPLETED);
         appointmentRepository.save(appointment);
+
+        try {
+            String username = appointment.getVehicle().getOwner().getUsername();
+
+            Double repairCost = appointment.getServiceType().getPrice();
+
+            AddPointsRequestDto requestDto = new AddPointsRequestDto(username, repairCost);
+            loyaltyClient.addPoints(requestDto, apiKey);
+
+            log.info("Successfully sent loyalty points to microservice for user: {}", username);
+
+        } catch (Exception e) {
+            log.error("Failed to connect to Loyalty Service: {}", e.getMessage());
+        }
     }
 }
