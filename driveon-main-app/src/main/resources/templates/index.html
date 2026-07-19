@@ -196,8 +196,10 @@
 
             <ul class="navbar-nav ms-auto align-items-center" th:if="${username != null}">
                 <li class="nav-item me-4">
-                    <span class="text-warning fw-bold">Hello, <span class="text-light"
-                                                                    th:text="${username}">User</span></span>
+                    <a class="nav-link text-light" th:href="@{/users/profile}">
+                        <i class="fa-solid fa-user me-1 text-warning"></i>
+                        <span class="fw-bold" th:text="${username}">User</span>
+                    </a>
                 </li>
                 <li class="nav-item me-2">
                     <a class="nav-link text-light" th:href="@{/appointments/add}"><i

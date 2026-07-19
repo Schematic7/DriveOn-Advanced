@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - DriveOn Motors</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800;900&display=swap"
+          rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1c23;
+            overflow-y: scroll;
+        }
+
+        .navbar {
+            background-color: #1a1c23 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: 0.1rem;
+            font-size: 1.8rem;
+            color: #ffffff !important;
+        }
+
+        .brand-highlight { color: #e63946; }
+
+        .dark-profile-panel {
+            background-color: #1a1c23;
+            color: #edf2f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 1.5rem 4rem 3rem 4rem;
+            min-height: calc(100vh - 90px);
+            box-shadow: 20px 0 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .panel-header h2 {
+            font-weight: 900;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.08);
+            margin: 30px 0;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-group { margin-bottom: 20px; }
+        .info-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 500;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .loyalty-points-display {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #fca311;
+            line-height: 1;
+            margin: 15px 0;
+            text-shadow: 0 0 20px rgba(252, 163, 17, 0.2);
+        }
+
+        .how-it-works-box {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #fca311;
+            padding: 15px 20px;
+            border-radius: 0 6px 6px 0;
+            margin-top: 20px;
+        }
+
+        .btn-brand {
+            background-color: #e63946;
+            color: white;
+            border: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn-brand:hover { background-color: #d90429; color: white; }
+
+        .profile-image-container {
+            background-image: linear-gradient(to right, rgba(26, 28, 35, 0.3) 0%, rgba(26, 28, 35, 0.7) 100%), url('/images/ProfileImg.png');
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            position: relative;
+        }
+
+        .image-overlay-text {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            color: white;
+        }
+
+        @media (max-width: 992px) {
+            .dark-profile-panel { padding: 2rem; box-shadow: none; }
+            .profile-image-container { min-height: 400px; display: none; }
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-lg navbar-dark pb-3 pt-3">
+    <div class="container-fluid px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/}">
+            DRIVE<span class="brand-highlight">ON</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+
+                <li class="nav-item me-4">
+                    <a class="nav-link text-light" th:href="@{/users/profile}">
+                        <i class="fa-solid fa-user me-1 text-warning"></i>
+                        <span class="fw-bold" th:text="${userProfile.username}">User</span>
+                    </a>
+                </li>
+
+                <li class="nav-item me-3">
+                    <a class="nav-link text-light" th:href="@{/}">
+                        <i class="fa-solid fa-warehouse me-1 brand-highlight"></i> My Garage
+                    </a>
+                </li>
+
+                <li class="nav-item me-2">
+                    <a class="nav-link text-light" th:href="@{/appointments/add}">
+                        <i class="fa-solid fa-calendar-plus me-1 brand-highlight"></i> Book Service
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-light" th:href="@{/vehicles/add}">
+                        <i class="fa-solid fa-car me-1 brand-highlight"></i> Add Vehicle
+                    </a>
+                </li>
+
+                <li class="nav-item ms-3" sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-outline-warning btn-sm fw-bold px-3 py-2" th:href="@{/admin/appointments}">
+                        <i class="fa-solid fa-shield-halved me-1"></i> Admin
+                    </a>
+                </li>
+
+                <li class="nav-item ms-3">
+                    <form th:action="@{/users/logout}" th:method="POST" class="m-0">
+                        <button type="submit" class="btn btn-outline-danger btn-sm fw-bold px-3 py-1 rounded-1">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid p-0">
+
+    <div class="row g-0">
+
+        <div class="col-lg-5 col-md-12">
+            <div class="dark-profile-panel">
+
+                <div class="panel-header mb-4 mt-2">
+                    <h2>My Garage Profile</h2>
+                    <p class="text-white-50 mb-0">Manage your personal details and track your loyalty status.</p>
+                </div>
+
+                <div class="section-title">
+                    <i class="fa-solid fa-user-shield me-2 text-white-50"></i> Personal Info
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Email Address</div>
+                    <div class="info-value" th:text="${userProfile.email}">email@example.com</div>
+                </div>
+
+                <div class="info-group">
+                    <div class="info-label">Full Name</div>
+                    <div class="info-value" th:text="${userProfile.firstName + ' ' + userProfile.lastName}">John Doe</div>
+                </div>
+
+                <div class="info-group mb-4">
+                    <div class="info-label">Phone Number</div>
+                    <div class="info-value" th:text="${userProfile.phoneNumber}">+123456789</div>
+                </div>
+
+                <a th:href="@{/users/profile/edit}" class="btn btn-brand rounded-1">
+                    <i class="fa-solid fa-pen-to-square me-2"></i> Edit Profile
+                </a>
+
+                <div class="section-divider"></div>
+
+                <div class="section-title text-warning">
+                    <i class="fa-solid fa-award me-2"></i> Loyalty Club
+                </div>
+
+                <div th:if="${pointsServiceAvailable}">
+                    <div class="info-label">Available Points</div>
+                    <div class="loyalty-points-display" th:text="${loyaltyPoints}">0</div>
+
+                    <p class="text-white-50 small mb-0">
+                        Points are automatically applied as a discount on your next service appointment.
+                    </p>
+
+                    <div class="how-it-works-box mb-3">
+                        <div class="fw-bold text-white mb-1" style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-circle-info me-1 text-warning"></i> How it works
+                        </div>
+                        <p class="text-white-50 mb-0" style="font-size: 0.8rem; line-height: 1.4;">
+                            You earn points for every completed service. At your next booking, your points are converted into a discount (e.g., 100 points = €10 off). No extra steps required!
+                        </p>
+                    </div>
+                </div>
+
+                <div th:unless="${pointsServiceAvailable}" class="alert alert-warning text-start mb-0 rounded-1 mt-3">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <strong>System Offline</strong><br>
+                    <span class="small">The Loyalty Club service is temporarily offline for maintenance. Please check back later.</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-7 d-none d-lg-block p-0">
+            <div class="profile-image-container">
+                <div class="image-overlay-text">
+                    <h3 class="fw-bold mb-1 text-white">Your Trusted Partner.</h3>
+                    <p class="mb-0 text-white-50">Keeping you safe on the road since 2026.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
