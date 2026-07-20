@@ -12,7 +12,8 @@ import bg.softuni.autoservice.model.entity.Vehicle;
 import bg.softuni.autoservice.repository.AppointmentRepository;
 import bg.softuni.autoservice.repository.ServiceTypeRepository;
 import bg.softuni.autoservice.repository.VehicleRepository;
-import bg.softuni.autoservice.service.client.LoyaltyClient;
+import bg.softuni.autoservice.service.loyalty.LoyaltyIntegrationService;
+import bg.softuni.autoservice.service.loyalty.client.LoyaltyClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,17 +29,19 @@ public class AppointmentService {
     private final VehicleRepository vehicleRepository;
     private final ServiceTypeRepository serviceTypeRepository;
     private final LoyaltyClient loyaltyClient;
+    private final LoyaltyIntegrationService loyaltyIntegrationService;
 
     @Value("${loyalty.api.key}")
     private String apiKey;
 
     public AppointmentService(AppointmentRepository appointmentRepository,
                               VehicleRepository vehicleRepository,
-                              ServiceTypeRepository serviceTypeRepository, LoyaltyClient loyaltyClient) {
+                              ServiceTypeRepository serviceTypeRepository, LoyaltyClient loyaltyClient, LoyaltyIntegrationService loyaltyIntegrationService) {
         this.appointmentRepository = appointmentRepository;
         this.vehicleRepository = vehicleRepository;
         this.serviceTypeRepository = serviceTypeRepository;
         this.loyaltyClient = loyaltyClient;
+        this.loyaltyIntegrationService = loyaltyIntegrationService;
     }
 
     public void createAppointment(AppointmentAddDTO dto, String username) {
@@ -55,12 +58,12 @@ public class AppointmentService {
         ServiceType serviceType = serviceTypeRepository.findById(UUID.fromString(dto.getServiceTypeId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Service type not found!"));
 
-
         Appointment appointment = Appointment.builder()
                 .appointmentDate(dto.getAppointmentDate())
                 .notes(dto.getNotes())
                 .vehicle(vehicle)
                 .serviceType(serviceType)
+                .usesLoyaltyPoints(dto.getUseLoyaltyPoints() != null && dto.getUseLoyaltyPoints())
                 .build();
 
         appointmentRepository.save(appointment);
@@ -107,11 +110,14 @@ public class AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found!"));
 
         appointment.setStatus(bg.softuni.autoservice.model.enums.AppointmentStatus.COMPLETED);
-        appointmentRepository.save(appointment);
+
+        String username = appointment.getVehicle().getOwner().getUsername();
+
+        if (Boolean.TRUE.equals(appointment.getUsesLoyaltyPoints())) {
+            loyaltyIntegrationService.spendPoints(username, 20);
+        }
 
         try {
-            String username = appointment.getVehicle().getOwner().getUsername();
-
             Double repairCost = appointment.getServiceType().getPrice();
 
             AddPointsRequestDto requestDto = new AddPointsRequestDto(username, repairCost);
@@ -122,5 +128,6 @@ public class AppointmentService {
         } catch (Exception e) {
             log.error("Failed to connect to Loyalty Service: {}", e.getMessage());
         }
+        appointmentRepository.save(appointment);
     }
 }

@@ -25,4 +25,6 @@ public class AppointmentAddDTO {
     private LocalDateTime appointmentDate;
 
     private String notes;
+
+    private Boolean useLoyaltyPoints;
 }

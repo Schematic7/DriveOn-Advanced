@@ -4,6 +4,7 @@ import bg.softuni.autoservice.model.dto.appointment.AppointmentAddDTO;
 import bg.softuni.autoservice.service.AppointmentService;
 import bg.softuni.autoservice.service.ServiceTypeService;
 import bg.softuni.autoservice.service.VehicleService;
+import bg.softuni.autoservice.service.loyalty.LoyaltyIntegrationService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,13 +23,16 @@ public class AppointmentController {
     private final VehicleService vehicleService;
     private final ServiceTypeService serviceTypeService;
     private final AppointmentService appointmentService;
+    private final LoyaltyIntegrationService loyaltyIntegrationService;
 
     public AppointmentController(VehicleService vehicleService,
                                  ServiceTypeService serviceTypeService,
-                                 AppointmentService appointmentService) {
+                                 AppointmentService appointmentService,
+                                 LoyaltyIntegrationService loyaltyIntegrationService) {
         this.vehicleService = vehicleService;
         this.serviceTypeService = serviceTypeService;
         this.appointmentService = appointmentService;
+        this.loyaltyIntegrationService = loyaltyIntegrationService;
     }
 
     @ModelAttribute("appointmentAddDTO")
@@ -42,6 +46,9 @@ public class AppointmentController {
         model.addAttribute("userVehicles", vehicleService.getVehiclesForUser(userDetails.getUsername()));
 
         model.addAttribute("allServices", serviceTypeService.getAllServices());
+
+        Integer availablePoints = loyaltyIntegrationService.getAvailablePoints(userDetails.getUsername());
+        model.addAttribute("availablePoints", availablePoints);
 
         return "appointment-add";
     }

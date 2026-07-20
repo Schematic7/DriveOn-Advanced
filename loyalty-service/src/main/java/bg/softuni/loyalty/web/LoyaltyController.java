@@ -3,6 +3,7 @@ package bg.softuni.loyalty.web;
 import bg.softuni.loyalty.model.dto.AddPointsRequestDto;
 import bg.softuni.loyalty.model.dto.LoyaltyPointsResponseDto;
 import bg.softuni.loyalty.model.dto.PointsResponseDto;
+import bg.softuni.loyalty.model.dto.SpendPointsRequestDto;
 import bg.softuni.loyalty.service.LoyaltyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +36,25 @@ public class LoyaltyController {
 
         PointsResponseDto response = new PointsResponseDto(username, points);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/spend")
+    public ResponseEntity<PointsResponseDto> spendPoints(@RequestBody SpendPointsRequestDto requestDto) {
+
+        try {
+            PointsResponseDto updatedPoints = loyaltyService.spendPoints(
+                    requestDto.getUsername(),
+                    requestDto.getPointsToSpend()
+            );
+            return ResponseEntity.ok(updatedPoints);
+
+        } catch (IllegalArgumentException e) {
+
+            return ResponseEntity.badRequest().build();
+
+        } catch (Exception e) {
+
+            return ResponseEntity.notFound().build();
+        }
     }
 }

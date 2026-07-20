@@ -1,7 +1,8 @@
-package bg.softuni.autoservice.service.client;
+package bg.softuni.autoservice.service.loyalty.client;
 
 import bg.softuni.autoservice.model.dto.loyalty.AddPointsRequestDto;
 import bg.softuni.autoservice.model.dto.loyalty.PointsResponseDto;
+import bg.softuni.autoservice.model.dto.loyalty.SpendPointsRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,4 +22,9 @@ public interface LoyaltyClient {
     PointsResponseDto getUserPoints(@PathVariable("username") String username,
                                     @RequestHeader("X-API-Key") String apiKey);
 
+    @PostMapping("/spend")
+    PointsResponseDto spendPoints(
+            @RequestBody SpendPointsRequestDto requestDto,
+            @RequestHeader("X-API-Key") String apiKey
+    );
 }

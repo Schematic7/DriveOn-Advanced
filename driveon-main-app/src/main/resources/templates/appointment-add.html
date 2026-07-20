@@ -8,7 +8,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
 
     <style>
         body {
@@ -26,14 +27,24 @@
             background-color: #1a1c23 !important;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        .navbar-brand { font-weight: 900; letter-spacing: 1.5px; font-size: 1.8rem; color: #ffffff !important; text-decoration: none;}
-        .brand-highlight { color: #e63946; }
+
+        .navbar-brand {
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            font-size: 1.8rem;
+            color: #ffffff !important;
+            text-decoration: none;
+        }
+
+        .brand-highlight {
+            color: #e63946;
+        }
 
         .form-card {
             background-color: #1a1c23;
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             overflow: hidden;
             margin-top: 40px;
             margin-bottom: 40px;
@@ -59,7 +70,9 @@
             padding: 40px;
         }
 
-        .form-group { margin-bottom: 20px; }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
         label {
             display: block;
@@ -97,7 +110,9 @@
             background-color: #35394a;
         }
 
-        input::placeholder, textarea::placeholder { color: #6c757d; }
+        input::placeholder, textarea::placeholder {
+            color: #6c757d;
+        }
 
         select option {
             background-color: #2b2d42;
@@ -139,7 +154,10 @@
             margin-top: 10px;
         }
 
-        .btn-submit:hover { background-color: #1d3557; color: white;}
+        .btn-submit:hover {
+            background-color: #1d3557;
+            color: white;
+        }
 
         .btn-cancel {
             background-color: transparent;
@@ -157,7 +175,11 @@
             text-align: center;
             margin-top: 10px;
         }
-        .btn-cancel:hover { background-color: rgba(255, 255, 255, 0.05); color: #ffffff; }
+
+        .btn-cancel:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+        }
 
     </style>
 </head>
@@ -195,13 +217,15 @@
                 <div th:if="${#lists.isEmpty(userVehicles)}" class="empty-state-card">
                     <i class="fa-solid fa-car-side fa-3x mb-3 text-white-50"></i>
                     <h5 class="text-white mb-2">Your Garage is Empty</h5>
-                    <p class="text-muted mb-4">You need to add a vehicle to your garage before booking an appointment.</p>
+                    <p class="text-muted mb-4">You need to add a vehicle to your garage before booking an
+                        appointment.</p>
                     <a th:href="@{/vehicles/add}" class="btn btn-outline-light fw-bold px-4 py-2">
                         <i class="fa-solid fa-plus me-2"></i> Add Vehicle Now
                     </a>
                 </div>
 
-                <form th:if="${!#lists.isEmpty(userVehicles)}" th:action="@{/appointments/add}" th:method="POST" th:object="${appointmentAddDTO}">
+                <form th:if="${!#lists.isEmpty(userVehicles)}" th:action="@{/appointments/add}" th:method="POST"
+                      th:object="${appointmentAddDTO}">
 
                     <div class="row">
                         <div class="col-md-6 form-group">
@@ -213,7 +237,8 @@
                                         th:text="${vehicle.make + ' ' + vehicle.model + ' (' + vehicle.licensePlate + ')'}">
                                 </option>
                             </select>
-                            <span class="error-message" th:if="${#fields.hasErrors('vehicleId')}" th:errors="*{vehicleId}">Error</span>
+                            <span class="error-message" th:if="${#fields.hasErrors('vehicleId')}"
+                                  th:errors="*{vehicleId}">Error</span>
                         </div>
 
                         <div class="col-md-6 form-group">
@@ -225,19 +250,43 @@
                                         th:text="${service.name + ' - $' + service.price}">
                                 </option>
                             </select>
-                            <span class="error-message" th:if="${#fields.hasErrors('serviceTypeId')}" th:errors="*{serviceTypeId}">Error</span>
+                            <span class="error-message" th:if="${#fields.hasErrors('serviceTypeId')}"
+                                  th:errors="*{serviceTypeId}">Error</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="appointmentDate">Preferred Date & Time <span class="required-star">*</span></label>
-                        <input type="datetime-local" id="appointmentDate" th:field="*{appointmentDate}" />
-                        <span class="error-message" th:if="${#fields.hasErrors('appointmentDate')}" th:errors="*{appointmentDate}">Error</span>
+                        <input type="datetime-local" id="appointmentDate" th:field="*{appointmentDate}"/>
+                        <span class="error-message" th:if="${#fields.hasErrors('appointmentDate')}"
+                              th:errors="*{appointmentDate}">Error</span>
                     </div>
 
                     <div class="form-group mb-4">
                         <label for="notes">Additional Notes (Optional)</label>
-                        <textarea id="notes" th:field="*{notes}" placeholder="E.g. Check the brakes, they are squeaking..."></textarea>
+                        <textarea id="notes" th:field="*{notes}"
+                                  placeholder="E.g. Check the brakes, they are squeaking..."></textarea>
+                    </div>
+
+                    <div class="form-group mb-3" th:if="${availablePoints != null && availablePoints > 0}">
+                        <div class="alert alert-info">
+                            <p class="mb-2">
+                                Имате налични <strong><span th:text="${availablePoints}"></span></strong> точки в
+                                профила си.
+                            </p>
+
+                            <div class="form-check" th:if="${availablePoints >= 20}">
+                                <input class="form-check-input" type="checkbox" id="useLoyaltyPoints"
+                                       th:field="*{useLoyaltyPoints}">
+                                <label class="form-check-label" for="useLoyaltyPoints">
+                                    Използвай 20 точки за отстъпка
+                                </label>
+                            </div>
+
+                            <div class="text-danger small" th:if="${availablePoints < 20}">
+                                <em>Нужни са поне 20 точки, за да активирате отстъпка.</em>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row mt-4">
@@ -245,7 +294,9 @@
                             <a th:href="@{/}" class="btn-cancel"><i class="fa-solid fa-arrow-left me-2"></i> Cancel</a>
                         </div>
                         <div class="col-md-8">
-                            <button type="submit" class="btn-submit"><i class="fa-solid fa-calendar-plus me-2"></i> Confirm Booking</button>
+                            <button type="submit" class="btn-submit"><i class="fa-solid fa-calendar-plus me-2"></i>
+                                Confirm Booking
+                            </button>
                         </div>
                     </div>
                 </form>

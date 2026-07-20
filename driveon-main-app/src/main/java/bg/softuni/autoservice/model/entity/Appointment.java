@@ -40,6 +40,9 @@ public class Appointment {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdOn;
 
+    @Column(name = "uses_loyalty_points")
+    private Boolean usesLoyaltyPoints;
+
     @PrePersist
     public void prePersist() {
         this.createdOn = LocalDateTime.now();

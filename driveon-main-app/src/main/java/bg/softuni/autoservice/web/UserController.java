@@ -1,9 +1,10 @@
 package bg.softuni.autoservice.web;
+
 import bg.softuni.autoservice.model.dto.loyalty.PointsResponseDto;
 import bg.softuni.autoservice.model.dto.user.UserProfileDTO;
 import bg.softuni.autoservice.model.dto.user.UserRegisterDTO;
 import bg.softuni.autoservice.service.UserService;
-import bg.softuni.autoservice.service.client.LoyaltyClient;
+import bg.softuni.autoservice.service.loyalty.client.LoyaltyClient;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;

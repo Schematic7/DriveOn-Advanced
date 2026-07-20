@@ -1,5 +1,6 @@
 package bg.softuni.loyalty.service;
 
+import bg.softuni.loyalty.model.dto.PointsResponseDto;
 import bg.softuni.loyalty.model.entity.LoyaltyAccount;
 import bg.softuni.loyalty.repository.LoyaltyAccountRepository;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,22 @@ public class LoyaltyService {
         return repository.findByUsername(username)
                 .map(LoyaltyAccount::getPoints)
                 .orElse(0);
+    }
+
+    @Transactional
+    public PointsResponseDto spendPoints(String username, Integer pointsToSpend) {
+
+        LoyaltyAccount account = repository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Account not found for user: " + username));
+
+        if (account.getPoints() < pointsToSpend) {
+            throw new IllegalArgumentException("Insufficient points! User has: " + account.getPoints());
+        }
+
+        account.setPoints(account.getPoints() - pointsToSpend);
+
+        repository.save(account);
+
+        return new PointsResponseDto(account.getUsername(), account.getPoints());
     }
 }
