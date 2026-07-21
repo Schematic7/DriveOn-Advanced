@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+
+        .header-banner {
+            background-color: #ffc107;
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 3px solid #e0a800;
+        }
+
+        .header-banner h2 {
+            margin: 0;
+            color: #343a40;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-banner">
+    <h2>User & Role Management</h2>
+</div>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-center gap-3 mb-4">
+        <a th:href="@{/admin/appointments}" class="btn btn-secondary">
+            &larr; Manager Dashboard
+        </a>
+        <a th:href="@{/}" class="btn btn-secondary">
+            Home &rarr;
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th class="text-center">Vehicles Count</th>
+                <th class="text-center">Appointments Count</th>
+                <th class="text-center">Loyalty Points</th>
+                <th>Role & Action</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="user : ${users}">
+                <td th:text="${user.username}">user123</td>
+                <td th:text="${user.email}">user@abv.bg</td>
+                <td class="text-center" th:text="${user.vehiclesCount}">2</td>
+                <td class="text-center" th:text="${user.appointmentsCount}">5</td>
+                <td class="text-center">
+                    <span class="badge bg-success rounded-pill fs-6" th:text="${user.loyaltyPoints}">150</span>
+                </td>
+                <td>
+
+                    <form th:action="@{/admin/users/change-role/{id}(id=${user.id})}" method="POST"
+                          class="d-flex align-items-center mb-0">
+                        <select name="newRole" class="form-select form-select-sm me-2" style="width: auto;">
+                            <option value="USER" th:selected="${user.role == 'USER'}">USER</option>
+                            <option value="ADMIN" th:selected="${user.role == 'ADMIN'}">ADMIN</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Complete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
