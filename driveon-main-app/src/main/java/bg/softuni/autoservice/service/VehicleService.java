@@ -11,12 +11,14 @@ import bg.softuni.autoservice.model.entity.User;
 import bg.softuni.autoservice.model.entity.Vehicle;
 import bg.softuni.autoservice.repository.UserRepository;
 import bg.softuni.autoservice.repository.VehicleRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.List;
 
+@Slf4j
 @Service
 public class VehicleService {
 
@@ -39,6 +41,8 @@ public class VehicleService {
                 .orElseThrow(() -> new ResourceNotFoundException("Logged in user not found in DB!"));
 
         Vehicle vehicle = VehicleMapper.toVehicleEntity(vehicleAddDTO, owner);
+
+        log.info("User {} is adding a new vehicle with License Plate: {}", userDetails.getUsername(), vehicleAddDTO.getLicensePlate());
 
         vehicleRepository.save(vehicle);
     }
@@ -66,6 +70,8 @@ public class VehicleService {
             throw new UnauthorizedActionException("You are not authorized to delete this vehicle!");
         }
 
+        log.info("User {} is deleting vehicle with ID: {}", username, vehicleId);
+
         vehicleRepository.delete(vehicle);
     }
 
@@ -90,6 +96,8 @@ public class VehicleService {
         }
 
         VehicleMapper.updateVehicleFromDto(vehicle, editDTO);
+
+        log.info("User {} is updating vehicle with ID: {}", username, vehicleId);
 
         vehicleRepository.save(vehicle);
     }

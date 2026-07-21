@@ -3,12 +3,14 @@ package bg.softuni.autoservice.service.scheduling;
 import bg.softuni.autoservice.model.entity.Appointment;
 import bg.softuni.autoservice.model.enums.AppointmentStatus; // Променен импорт!
 import bg.softuni.autoservice.repository.AppointmentRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Component
 public class AppointmentCleanupScheduler {
 
@@ -32,7 +34,7 @@ public class AppointmentCleanupScheduler {
             appointmentRepository.save(appointment);
         }
 
-        System.out.println("Cron Job: Cancelled " + overdue.size() + " overdue appointments.");
+        log.info("Cron Job: Cancelled {} overdue appointments.", overdue.size());
     }
 
     @Scheduled(fixedRate = 3600000)
@@ -48,6 +50,6 @@ public class AppointmentCleanupScheduler {
 
         appointmentRepository.deleteAll(oldCancelled);
 
-        System.out.println("Fixed Rate Job: Deleted " + oldCancelled.size() + " old cancelled appointments.");
+        log.info("Fixed Rate Job: Deleted {} old cancelled appointments.", oldCancelled.size());
     }
 }

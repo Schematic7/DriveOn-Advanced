@@ -66,6 +66,9 @@ public class AppointmentService {
                 .usesLoyaltyPoints(dto.getUseLoyaltyPoints() != null && dto.getUseLoyaltyPoints())
                 .build();
 
+        log.info("User {} is creating a new appointment for vehicle ID: {} on date: {}",
+                username, dto.getVehicleId(), dto.getAppointmentDate());
+
         appointmentRepository.save(appointment);
     }
 
@@ -87,10 +90,15 @@ public class AppointmentService {
 
         appointment.setStatus(bg.softuni.autoservice.model.enums.AppointmentStatus.CANCELLED);
 
+        log.info("User {} is cancelling appointment with ID: {}", username, id);
+
         appointmentRepository.save(appointment);
     }
 
     public List<AppointmentViewDTO> getAllAppointmentsForAdmin() {
+
+        log.info("Admin is fetching all appointments for the management dashboard.");
+
         return appointmentRepository.findAllByOrderByAppointmentDateDesc()
                 .stream()
                 .map(AppointmentMapper::toAdminViewDTO)
@@ -102,6 +110,9 @@ public class AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found!"));
 
         appointment.setStatus(bg.softuni.autoservice.model.enums.AppointmentStatus.APPROVED);
+
+        log.info("Admin approved appointment with ID: {}", id);
+
         appointmentRepository.save(appointment);
     }
 
@@ -110,6 +121,8 @@ public class AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Appointment not found!"));
 
         appointment.setStatus(bg.softuni.autoservice.model.enums.AppointmentStatus.COMPLETED);
+
+        log.info("Admin completed appointment with ID: {}. Processing loyalty points...", id);
 
         String username = appointment.getVehicle().getOwner().getUsername();
 

@@ -9,6 +9,7 @@ import bg.softuni.autoservice.model.dto.user.UserRegisterDTO;
 import bg.softuni.autoservice.model.entity.User;
 import bg.softuni.autoservice.repository.UserRepository;
 import bg.softuni.autoservice.service.loyalty.LoyaltyIntegrationService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import bg.softuni.autoservice.model.enums.UserRole;
@@ -16,6 +17,7 @@ import bg.softuni.autoservice.model.enums.UserRole;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -45,6 +47,8 @@ public class UserService {
 
         User userEntity = UserMapper.toUserEntity(registerDTO, encodedPassword);
 
+        log.info("Registering new user with email: {}", registerDTO.getEmail());
+
         userRepository.save(userEntity);
     }
 
@@ -63,11 +67,15 @@ public class UserService {
         user.setLastName(profileDTO.getLastName());
         user.setPhoneNumber(profileDTO.getPhoneNumber());
 
+        log.info("Updating profile for user: {}", username);
+
         userRepository.save(user);
     }
 
     public List<UserManagementViewDTO> getAllUsersForManagement() {
         List<User> allUsers = userRepository.findAll();
+
+        log.info("Admin is fetching all users for the management dashboard.");
 
         return allUsers.stream().map(user -> {
 
@@ -82,6 +90,8 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
 
         UserRole newRole = UserRole.valueOf(newRoleStr.toUpperCase());
+
+        log.info("Changing role for user ID: {} to {}", userId, newRole);
 
         user.setRole(newRole);
         userRepository.save(user);

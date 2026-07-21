@@ -3,9 +3,11 @@ package bg.softuni.loyalty.service;
 import bg.softuni.loyalty.model.dto.PointsResponseDto;
 import bg.softuni.loyalty.model.entity.LoyaltyAccount;
 import bg.softuni.loyalty.repository.LoyaltyAccountRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 public class LoyaltyService {
 
@@ -23,6 +25,7 @@ public class LoyaltyService {
                     LoyaltyAccount newAccount = new LoyaltyAccount();
                     newAccount.setUsername(username);
                     newAccount.setPoints(0);
+                    log.info("Created new loyalty account for user: {}", username);
                     return repository.save(newAccount);
                 });
 
@@ -31,6 +34,8 @@ public class LoyaltyService {
         if (earnedPoints > 0) {
             account.setPoints(account.getPoints() + earnedPoints);
             repository.save(account);
+
+            log.info("Added {} points to user: {}. Total points now: {}", earnedPoints, username, account.getPoints());
         }
 
         return account.getPoints();
@@ -46,15 +51,20 @@ public class LoyaltyService {
     public PointsResponseDto spendPoints(String username, Integer pointsToSpend) {
 
         LoyaltyAccount account = repository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Account not found for user: " + username));
+                .orElseThrow(() -> {
+                    log.error("Attempted to spend points for non-existent account: {}", username);
+                    return new RuntimeException("Account not found for user: " + username);
+                });
 
         if (account.getPoints() < pointsToSpend) {
+            log.warn("User {} tried to spend {} points, but only has {}", username, pointsToSpend, account.getPoints());
             throw new IllegalArgumentException("Insufficient points! User has: " + account.getPoints());
         }
 
         account.setPoints(account.getPoints() - pointsToSpend);
-
         repository.save(account);
+
+        log.info("User {} spent {} points. Remaining points: {}", username, pointsToSpend, account.getPoints());
 
         return new PointsResponseDto(account.getUsername(), account.getPoints());
     }
