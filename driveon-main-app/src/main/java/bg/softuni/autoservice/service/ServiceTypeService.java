@@ -2,6 +2,7 @@ package bg.softuni.autoservice.service;
 
 import bg.softuni.autoservice.model.entity.ServiceType;
 import bg.softuni.autoservice.repository.ServiceTypeRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class ServiceTypeService {
         this.serviceTypeRepository = serviceTypeRepository;
     }
 
+    @Cacheable("serviceTypes")
     public List<ServiceType> getAllServices() {
         return serviceTypeRepository.findAll();
     }
