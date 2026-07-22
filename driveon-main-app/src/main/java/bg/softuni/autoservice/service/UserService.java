@@ -1,5 +1,6 @@
 package bg.softuni.autoservice.service;
 
+import bg.softuni.autoservice.exceptions.DuplicateResourceException;
 import bg.softuni.autoservice.exceptions.EmailAlreadyExistsException;
 import bg.softuni.autoservice.exceptions.ResourceNotFoundException;
 import bg.softuni.autoservice.mapper.user.UserMapper;
@@ -43,6 +44,11 @@ public class UserService {
                     throw new EmailAlreadyExistsException("User with this email already exists!");
                 });
 
+        userRepository.findByPhoneNumber(registerDTO.getPhoneNumber())
+                .ifPresent(user -> {
+                    throw new DuplicateResourceException("User with this phone number already exists!");
+                });
+
         String encodedPassword = passwordEncoder.encode(registerDTO.getPassword());
 
         User userEntity = UserMapper.toUserEntity(registerDTO, encodedPassword);
@@ -62,6 +68,13 @@ public class UserService {
     public void updateProfile(String username, UserProfileDTO profileDTO) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.getPhoneNumber().equals(profileDTO.getPhoneNumber())) {
+            userRepository.findByPhoneNumber(profileDTO.getPhoneNumber())
+                    .ifPresent(u -> {
+                        throw new DuplicateResourceException("This phone number is already taken!");
+                    });
+        }
 
         user.setFirstName(profileDTO.getFirstName());
         user.setLastName(profileDTO.getLastName());
