@@ -42,4 +42,10 @@ public class GlobalExceptionHandler {
         modelAndView.addObject("errorMessage", message);
         return modelAndView;
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ModelAndView handleIllegalArgument(IllegalArgumentException exception) {
+        log.error("Illegal argument error: {}", exception.getMessage());
+        return createErrorModelAndView(exception.getMessage());
+    }
 }

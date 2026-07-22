@@ -1,5 +1,6 @@
 package bg.softuni.loyalty.service;
 
+import bg.softuni.loyalty.exceptions.AccountNotFoundException;
 import bg.softuni.loyalty.model.dto.PointsResponseDto;
 import bg.softuni.loyalty.model.entity.LoyaltyAccount;
 import bg.softuni.loyalty.repository.LoyaltyAccountRepository;
@@ -53,7 +54,7 @@ public class LoyaltyService {
         LoyaltyAccount account = repository.findByUsername(username)
                 .orElseThrow(() -> {
                     log.error("Attempted to spend points for non-existent account: {}", username);
-                    return new RuntimeException("Account not found for user: " + username);
+                    return new AccountNotFoundException("Account not found for user: " + username);
                 });
 
         if (account.getPoints() < pointsToSpend) {
