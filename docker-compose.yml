@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  main-app:
+    build:
+      context: ./driveon-main-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - loyalty-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - LOYALTY_SERVICE_URL=http://loyalty-service:8081
+
+  loyalty-service:
+    build:
+      context: ./loyalty-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod

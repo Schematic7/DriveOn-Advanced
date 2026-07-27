@@ -9,6 +9,7 @@ import bg.softuni.autoservice.model.dto.loyalty.AddPointsRequestDto;
 import bg.softuni.autoservice.model.entity.Appointment;
 import bg.softuni.autoservice.model.entity.ServiceType;
 import bg.softuni.autoservice.model.entity.Vehicle;
+import bg.softuni.autoservice.model.event.AppointmentCreatedEvent;
 import bg.softuni.autoservice.repository.AppointmentRepository;
 import bg.softuni.autoservice.repository.ServiceTypeRepository;
 import bg.softuni.autoservice.repository.VehicleRepository;
@@ -16,6 +17,7 @@ import bg.softuni.autoservice.service.loyalty.LoyaltyIntegrationService;
 import bg.softuni.autoservice.service.loyalty.client.LoyaltyClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,18 +32,20 @@ public class AppointmentService {
     private final ServiceTypeRepository serviceTypeRepository;
     private final LoyaltyClient loyaltyClient;
     private final LoyaltyIntegrationService loyaltyIntegrationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Value("${loyalty.api.key}")
     private String apiKey;
 
     public AppointmentService(AppointmentRepository appointmentRepository,
                               VehicleRepository vehicleRepository,
-                              ServiceTypeRepository serviceTypeRepository, LoyaltyClient loyaltyClient, LoyaltyIntegrationService loyaltyIntegrationService) {
+                              ServiceTypeRepository serviceTypeRepository, LoyaltyClient loyaltyClient, LoyaltyIntegrationService loyaltyIntegrationService, ApplicationEventPublisher eventPublisher) {
         this.appointmentRepository = appointmentRepository;
         this.vehicleRepository = vehicleRepository;
         this.serviceTypeRepository = serviceTypeRepository;
         this.loyaltyClient = loyaltyClient;
         this.loyaltyIntegrationService = loyaltyIntegrationService;
+        this.eventPublisher = eventPublisher;
     }
 
     public void createAppointment(AppointmentAddDTO dto, String username) {
@@ -70,6 +74,9 @@ public class AppointmentService {
                 username, dto.getVehicleId(), dto.getAppointmentDate());
 
         appointmentRepository.save(appointment);
+
+        AppointmentCreatedEvent event = new AppointmentCreatedEvent(username, appointment.getServiceType().getName());
+        eventPublisher.publishEvent(event);
     }
 
     public List<AppointmentViewDTO> getAppointmentsForUser(String username) {

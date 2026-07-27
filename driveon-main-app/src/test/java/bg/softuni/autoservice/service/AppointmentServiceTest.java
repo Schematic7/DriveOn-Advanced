@@ -7,6 +7,7 @@ import bg.softuni.autoservice.model.entity.Appointment;
 import bg.softuni.autoservice.model.entity.ServiceType;
 import bg.softuni.autoservice.model.entity.User;
 import bg.softuni.autoservice.model.entity.Vehicle;
+import bg.softuni.autoservice.model.event.AppointmentCreatedEvent;
 import bg.softuni.autoservice.repository.AppointmentRepository;
 import bg.softuni.autoservice.repository.ServiceTypeRepository;
 import bg.softuni.autoservice.repository.VehicleRepository;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -39,6 +41,9 @@ public class AppointmentServiceTest {
     private LoyaltyClient loyaltyClient;
     @Mock
     private LoyaltyIntegrationService loyaltyIntegrationService;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private AppointmentService appointmentService;
@@ -81,6 +86,8 @@ public class AppointmentServiceTest {
         appointmentService.createAppointment(dto, "driver_bg");
 
         verify(appointmentRepository, times(1)).save(any(Appointment.class));
+
+        verify(eventPublisher, times(1)).publishEvent(any(AppointmentCreatedEvent.class));
     }
 
     @Test
