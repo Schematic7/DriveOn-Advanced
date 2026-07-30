@@ -43,7 +43,7 @@ The solution is implemented as a distributed system consisting of a core Main Sp
 | MySQL Database|
 |   (loyalty)   |
 +---------------+
-
+```
 ---
 
 # 🛠️ Technology Stack
