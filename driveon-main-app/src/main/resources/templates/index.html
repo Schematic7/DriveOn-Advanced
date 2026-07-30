@@ -13,11 +13,11 @@
           rel="stylesheet">
 
     <style>
-
         body {
             font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
+            -webkit-font-smoothing: antialiased;
         }
 
         .bg-guest {
@@ -34,27 +34,16 @@
             padding-top: 25px;
         }
 
-
-        .bg-user {
-            background: linear-gradient(135deg, #444a60 0%, #2f3446 100%);
-            color: #edf2f4;
-            min-height: 100vh;
-        }
-
-        .bg-user .navbar {
-            background-color: #1a1c23 !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .navbar-brand {
+        .navbar-brand-guest {
             font-weight: 900;
             letter-spacing: 0.1rem;
             font-size: 1.8rem;
-            color: #ffffff !important;
-        }
-
-        .brand-highlight {
-            color: #e63946;
+            color: #fff !important;
+            text-decoration: none;
+            background: linear-gradient(90deg, #fff 40%, #e63946);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero-transparent {
@@ -67,6 +56,10 @@
             font-weight: 900;
             letter-spacing: -1px;
             line-height: 1.1;
+        }
+
+        .brand-highlight-guest {
+            color: #e63946;
         }
 
         .brands-footer {
@@ -112,49 +105,7 @@
             color: #e63946;
         }
 
-        .custom-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-            margin-bottom: 35px;
-            background-color: #ffffff;
-            overflow: hidden;
-        }
-
-        .card-header-garage {
-            background-color: #1a1c23;
-            color: #edf2f4;
-            padding: 20px 25px;
-            border-bottom: 4px solid #e63946;
-        }
-
-        .card-header-appointments {
-            background-color: #1a1c23;
-            color: #edf2f4;
-            padding: 20px 25px;
-            border-bottom: 4px solid #457b9d;
-        }
-
-        .table > :not(caption) > * > * {
-            padding: 1.2rem 1.5rem;
-            vertical-align: middle;
-        }
-
-        .table-light {
-            background-color: #f8f9fa;
-            color: #6c757d;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-        }
-
-        .action-buttons form {
-            display: inline-block;
-            margin: 0;
-        }
-
-        .btn-brand {
+        .btn-brand-guest {
             background-color: #e63946;
             color: white;
             border: none;
@@ -163,253 +114,538 @@
             letter-spacing: 1px;
         }
 
-        .btn-brand:hover {
+        .btn-brand-guest:hover {
             background-color: #d90429;
             color: white;
         }
 
+        :root {
+            --bg: #08090c;
+            --surface: #12141b;
+            --surface-2: #171a23;
+            --line: rgba(255, 255, 255, .08);
+            --line-strong: rgba(255, 255, 255, .16);
+            --txt: #eef1f6;
+            --muted: #8b93a4;
+            --brand: #e63946;
+            --brand-2: #d90429;
+            --radius: 18px;
+        }
+
+        .bg-dashboard {
+            background-color: var(--bg);
+            background-image: radial-gradient(900px 500px at 12% -10%, rgba(230, 57, 70, .16), transparent 60%),
+            radial-gradient(800px 480px at 92% 4%, rgba(217, 4, 41, .10), transparent 60%);
+            background-attachment: fixed;
+            color: var(--txt);
+        }
+
+        .brand-highlight {
+            color: var(--brand);
+        }
+
+        .text-muted-2 {
+            color: var(--muted) !important;
+        }
+
+        .navbar-drive {
+            background: rgba(8, 9, 12, .72);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line);
+            padding: .9rem 0;
+        }
+
+        .navbar-drive .navbar-brand {
+            font-weight: 900;
+            letter-spacing: .22em;
+            font-size: 1.35rem;
+            color: #fff;
+            background: linear-gradient(90deg, #fff 40%, var(--brand));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar-drive .nav-link {
+            color: var(--muted) !important;
+            font-weight: 600;
+            font-size: .86rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            padding: .5rem .9rem !important;
+            border-radius: 999px;
+            transition: .22s ease;
+        }
+
+        .navbar-drive .nav-link:hover {
+            color: #fff !important;
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1) grayscale(1);
+        }
+
+        .btn-brand {
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            color: #fff;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            border: 0;
+            border-radius: 999px !important;
+            box-shadow: 0 12px 30px -12px rgba(230, 57, 70, .8);
+            transition: .25s ease;
+        }
+
+        .btn-brand:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px -14px rgba(230, 57, 70, .95);
+        }
+
+        .btn-ghost {
+            border: 1px solid var(--line-strong);
+            color: var(--txt);
+            background: rgba(255, 255, 255, .03);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, .09);
+            color: #fff;
+            border-color: rgba(255, 255, 255, .3);
+        }
+
+        .btn-ghost-warning {
+            border: 1px solid rgba(255, 193, 7, 0.4);
+            color: #ffc107;
+            background: rgba(255, 193, 7, 0.05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost-warning:hover {
+            background: rgba(255, 193, 7, 0.15);
+            color: #fff;
+            border-color: #ffc107;
+        }
+
+        .btn-ghost-danger {
+            border: 1px solid rgba(230, 57, 70, 0.4);
+            color: #e63946;
+            background: rgba(230, 57, 70, 0.05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost-danger:hover {
+            background: rgba(230, 57, 70, 0.15);
+            color: #fff;
+            border-color: #e63946;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 1px solid var(--line-strong);
+            background: rgba(255, 255, 255, .04);
+            color: var(--txt);
+            transition: .2s ease;
+        }
+
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, .12);
+            color: #fff;
+        }
+
+        .btn-icon.danger {
+            color: var(--brand);
+            background: rgba(230, 57, 70, 0.1);
+            border-color: rgba(230, 57, 70, 0.3);
+        }
+
+        .btn-icon.danger:hover {
+            background: var(--brand);
+            color: #fff;
+            border-color: var(--brand);
+        }
+
+        .panel {
+            background: linear-gradient(180deg, var(--surface-2), var(--surface));
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 30px 60px -35px rgba(0, 0, 0, .9);
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1.15rem 1.5rem;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, .02);
+        }
+
+        .panel-head h2 {
+            margin: 0;
+            font-size: .95rem;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+        }
+
+        .panel-head h2 i {
+            color: var(--brand);
+        }
+
+        .table-drive {
+            margin: 0;
+            color: var(--txt);
+            --bs-table-bg: transparent;
+        }
+
+        .table-drive thead th {
+            color: var(--muted);
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--line) !important;
+            padding: .95rem 1.5rem;
+        }
+
+        .table-drive tbody td {
+            border-bottom: 1px solid var(--line);
+            padding: 1.05rem 1.5rem;
+            vertical-align: middle;
+            font-weight: 500;
+            color: var(--txt);
+        }
+
+        .table-drive tbody tr:hover td {
+            background: rgba(255, 255, 255, .035);
+        }
+
+        .mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: .85rem;
+            color: var(--muted);
+        }
+
+        .plate {
+            display: inline-block;
+            padding: .28rem .65rem;
+            border-radius: 8px;
+            border: 1px solid var(--line-strong);
+            background: rgba(255, 255, 255, .05);
+            font-family: ui-monospace, Menlo, monospace;
+            font-weight: 700;
+            letter-spacing: .06em;
+            font-size: .82rem;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .32rem .8rem;
+            border-radius: 999px;
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+        }
+
+        .chip:before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .chip-pending {
+            color: #ffb020;
+            background: rgba(255, 176, 32, .12);
+            border-color: rgba(255, 176, 32, .3);
+        }
+
+        .chip-approved {
+            color: #3ddc97;
+            background: rgba(61, 220, 151, .12);
+            border-color: rgba(61, 220, 151, .3);
+        }
+
+        .chip-completed {
+            color: #5aa9ff;
+            background: rgba(90, 169, 255, .12);
+            border-color: rgba(90, 169, 255, .3);
+        }
+
+        .chip-cancelled {
+            color: #ff5f57;
+            background: rgba(255, 95, 87, .12);
+            border-color: rgba(255, 95, 87, .3);
+        }
+
+        .empty {
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .empty i {
+            font-size: 1.6rem;
+            color: var(--brand);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(230, 57, 70, 0.1);
+            border: 1px solid rgba(230, 57, 70, 0.25);
+            margin-bottom: 1.1rem;
+        }
+
+        .empty h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin: 0 0 .4rem;
+        }
+
+        .empty p {
+            color: var(--muted);
+            margin: 0;
+            font-size: .9rem;
+        }
     </style>
 </head>
 
-<body th:class="${username == null} ? 'bg-guest d-flex flex-column min-vh-100' : 'bg-user'">
+<body th:class="${#authorization.expression('isAuthenticated()')} ? 'bg-dashboard' : 'bg-guest d-flex flex-column min-vh-100'">
 
-<nav class="navbar navbar-expand-lg navbar-dark pb-3">
-    <div class="container-fluid px-4 px-lg-5">
-        <a class="navbar-brand" th:href="@{/}">
-            DRIVE<span class="brand-highlight">ON</span>
-        </a>
+<div sec:authorize="isAnonymous()" class="d-flex flex-column min-vh-100">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-lg navbar-dark pb-3">
+        <div class="container-fluid px-4 px-lg-5">
 
-        <div class="collapse navbar-collapse" id="navbarNav">
+            <a class="navbar-brand-guest" th:href="@{/}">DRIVEON</a>
 
-            <ul class="navbar-nav ms-auto align-items-center" th:if="${username == null}">
-                <li class="nav-item">
-                    <a class="nav-link fw-bold text-light fs-5 me-3" th:href="@{/users/login}">Log in</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-brand px-4 py-2 rounded-0" th:href="@{/users/register}">Register</a>
-                </li>
-            </ul>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavGuest">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavGuest">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold text-light fs-5 me-3" th:href="@{/users/login}">Log in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-brand-guest px-4 py-2 rounded-0" th:href="@{/users/register}">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-            <ul class="navbar-nav ms-auto align-items-center" th:if="${username != null}">
-                <li class="nav-item me-4">
-                    <a class="nav-link text-light" th:href="@{/users/profile}">
-                        <i class="fa-solid fa-user me-1 text-warning"></i>
-                        <span class="fw-bold" th:text="${username}">User</span>
-                    </a>
-                </li>
-                <li class="nav-item me-2">
-                    <a class="nav-link text-light" th:href="@{/appointments/add}"><i
-                            class="fa-solid fa-calendar-plus me-1 brand-highlight"></i> Book Service</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light" th:href="@{/vehicles/add}"><i
-                            class="fa-solid fa-car me-1 brand-highlight"></i> Add Vehicle</a>
-                </li>
-
-                <li class="nav-item ms-3" sec:authorize="hasRole('ADMIN')">
-                    <a class="btn btn-outline-warning btn-sm fw-bold px-3 py-2" th:href="@{/admin/appointments}">
-                        <i class="fa-solid fa-shield-halved me-1"></i> Admin
-                    </a>
-                </li>
-
-                <li class="nav-item ms-3">
-                    <form th:action="@{/users/logout}" th:method="POST" class="m-0">
-                        <button type="submit" class="btn btn-outline-danger btn-sm fw-bold px-3 py-1 rounded-1">
-                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
-                        </button>
-                    </form>
-                </li>
-            </ul>
+    <div class="container-fluid px-4 px-lg-5 flex-grow-1">
+        <div class="hero-transparent">
+            <h1 class="text-white mb-4">Drive with <br><span class="brand-highlight-guest">Confidence.</span></h1>
+            <p class="lead mb-5 text-light fs-4" style="opacity: 0.8; max-width: 550px;">
+                Expert mechanics. Transparent pricing. Highest quality repairs so you can feel safe on the road.
+            </p>
+            <div class="d-flex">
+                <a th:href="@{/vehicles/add}" class="btn btn-brand-guest btn-lg px-5 py-3 rounded-0 shadow-lg">
+                    <i class="fa-solid fa-car-side me-2"></i> Add Your Vehicle
+                </a>
+            </div>
         </div>
     </div>
-</nav>
 
-<div th:if="${username == null}" class="container-fluid px-4 px-lg-5 flex-grow-1">
-    <div class="hero-transparent">
-        <h1 class="text-white mb-4">Drive with <br><span class="brand-highlight">Confidence.</span></h1>
-        <p class="lead mb-5 text-light fs-4" style="opacity: 0.8; max-width: 550px;">
-            Expert mechanics. Transparent pricing. Highest quality repairs so you can feel safe on the road.
-        </p>
-        <div class="d-flex">
-            <a th:href="@{/vehicles/add}" class="btn btn-brand btn-lg px-5 py-3 rounded-0 shadow-lg">
-                <i class="fa-solid fa-car-side me-2"></i> Add Your Vehicle
-            </a>
+    <div class="brands-footer w-100">
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="brand-logos">
+                <div class="brand-item"><img th:src="@{/images/logos/tesla.svg}" alt="Tesla"><span>Tesla</span></div>
+                <div class="brand-item"><img th:src="@{/images/logos/toyota.svg}" alt="Toyota"><span>Toyota</span></div>
+                <div class="brand-item"><img th:src="@{/images/logos/hyundai.svg}" alt="Hyundai"><span>Hyundai</span>
+                </div>
+                <div class="brand-item"><img th:src="@{/images/logos/audi.svg}" alt="Audi"><span>Audi</span></div>
+                <div class="brand-item"><img th:src="@{/images/logos/mercedes.svg}" alt="Mercedes"><span>Mercedes</span>
+                </div>
+                <div class="brand-item"><img th:src="@{/images/logos/jaguar.svg}" alt="Jaguar"><span>Jaguar</span></div>
+                <div class="brand-item"><img th:src="@{/images/logos/suzuki.svg}" alt="Suzuki"><span>Suzuki</span></div>
+            </div>
         </div>
     </div>
 </div>
 
-<div th:if="${username == null}" class="brands-footer w-100">
-    <div class="container-fluid px-4 px-lg-5">
-        <div class="brand-logos">
+<div sec:authorize="isAuthenticated()">
 
-            <div class="brand-item">
-                <img th:src="@{/images/logos/tesla.svg}" alt="Tesla">
-                <span>Tesla</span>
+    <nav class="navbar navbar-expand-lg navbar-drive sticky-top">
+        <div class="container-fluid px-4 px-lg-5">
+            <a class="navbar-brand" th:href="@{/}">DRIVEON</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMainLogged">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMainLogged">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/users/profile}">
+                            <i class="fa-solid fa-user me-1 text-warning"></i> <span
+                                sec:authentication="name">User</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/appointments/add}">
+                            <i class="fa-solid fa-calendar-plus me-1 brand-highlight"></i> Book Service
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/vehicles/add}">
+                            <i class="fa-solid fa-car me-1 brand-highlight"></i> Add Vehicle
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="btn btn-ghost-warning btn-sm px-3 py-2 mx-2" th:href="@{/admin/appointments}">
+                            <i class="fa-solid fa-shield-halved me-1"></i> Admin
+                        </a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <form th:action="@{/users/logout}" th:method="POST" class="m-0">
+                            <button type="submit" class="btn btn-ghost-danger btn-sm px-3 py-2">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
-
-            <div class="brand-item">
-                <img th:src="@{/images/logos/toyota.svg}" alt="Toyota">
-                <span>Toyota</span>
-            </div>
-
-            <div class="brand-item">
-                <img th:src="@{/images/logos/hyundai.svg}" alt="Hyundai">
-                <span>Hyundai</span>
-            </div>
-
-            <div class="brand-item">
-                <img th:src="@{/images/logos/audi.svg}" alt="Audi">
-                <span>Audi</span>
-            </div>
-
-            <div class="brand-item">
-                <img th:src="@{/images/logos/mercedes.svg}" alt="Mercedes">
-                <span>Mercedes</span>
-            </div>
-
-            <div class="brand-item">
-                <img th:src="@{/images/logos/jaguar.svg}" alt="Jaguar">
-                <span>Jaguar</span>
-            </div>
-
-            <div class="brand-item">
-                <img th:src="@{/images/logos/suzuki.svg}" alt="Suzuki">
-                <span>Suzuki</span>
-            </div>
-
         </div>
-    </div>
-</div>
+    </nav>
 
-<div class="container py-5" th:if="${username != null}">
+    <div class="container py-5">
 
-    <div class="card custom-card">
-        <div class="card-header card-header-garage d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold"><i class="fa-solid fa-warehouse me-2 text-white-50"></i> My Garage</h5>
-            <a th:href="@{/vehicles/add}" class="btn btn-sm btn-light text-dark fw-bold rounded-1 px-3">
-                <i class="fa-solid fa-plus me-1"></i> New Vehicle
-            </a>
-        </div>
-        <div class="card-body p-0">
-
-            <div th:if="${#lists.isEmpty(vehicles)}" class="p-5 text-center text-muted">
-                <i class="fa-solid fa-car-side fa-3x mb-3" style="opacity: 0.2;"></i>
-                <h5>Your garage is empty</h5>
-                <p class="mb-0">Add your first vehicle to start booking services.</p>
+        <div class="panel mb-4">
+            <div class="panel-head">
+                <h2><i class="fa-solid fa-warehouse"></i> My Garage</h2>
+                <a th:href="@{/vehicles/add}" class="btn btn-ghost btn-sm px-3 py-2">
+                    <i class="fa-solid fa-plus me-1"></i> New Vehicle
+                </a>
             </div>
 
-            <div class="table-responsive" th:if="${!#lists.isEmpty(vehicles)}">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+            <div th:if="${#lists.isEmpty(vehicles)}" class="empty">
+                <i class="fa-solid fa-car"></i>
+                <h3>Your garage is empty</h3>
+                <p>Add your first vehicle to start booking services.</p>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(vehicles)}" class="table-responsive">
+                <table class="table table-drive align-middle">
+                    <thead>
                     <tr>
-                        <th>Make & Model</th>
+                        <th>Make &amp; Model</th>
                         <th>Year</th>
                         <th>License Plate</th>
                         <th>VIN Number</th>
-                        <th class="text-end pe-4">Manage</th>
+                        <th class="text-end">Manage</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="vehicle : ${vehicles}">
-                        <td class="fw-bold fs-6 text-dark" th:text="${vehicle.make + ' ' + vehicle.model}">Mazda 3</td>
-                        <td th:text="${vehicle.year}" class="text-muted fw-semibold">2008</td>
-                        <td>
-                            <span class="badge bg-dark text-white border rounded-1 px-3 py-2" style="font-size: 0.9rem;"
-                                  th:text="${vehicle.licensePlate}">PB1234PK</span>
-                        </td>
-                        <td class="text-muted font-monospace fw-medium fs-5" th:text="${vehicle.vin}">123456789...</td>
-                        <td class="text-end pe-4 action-buttons">
-                            <a th:href="@{/vehicles/{id}/edit(id=${vehicle.id})}"
-                               class="btn btn-sm btn-light text-dark border shadow-sm px-3 rounded-1">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                            <form th:action="@{/vehicles/{id}/delete(id=${vehicle.id})}" method="POST">
-                                <button type="submit" class="btn btn-sm btn-danger shadow-sm ms-2 px-3 rounded-1"
-                                        onclick="return confirm('Remove this vehicle from your garage?');">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
+                        <td class="fw-bold" th:text="${vehicle.make + ' ' + vehicle.model}">Mazda 3</td>
+                        <td class="text-muted-2" th:text="${vehicle.year}">2008</td>
+                        <td><span class="plate" th:text="${vehicle.licensePlate}">PB1234PK</span></td>
+                        <td class="mono" th:text="${vehicle.vin}">123456789...</td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-2 align-items-center">
+                                <a th:href="@{/vehicles/{id}/edit(id=${vehicle.id})}" class="btn-icon" title="Edit">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <form th:action="@{/vehicles/{id}/delete(id=${vehicle.id})}" method="POST" class="m-0">
+                                    <button type="submit" class="btn-icon danger" title="Delete"
+                                            onclick="return confirm('Delete this vehicle?')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
 
-    <div class="card custom-card mt-5">
-        <div class="card-header card-header-appointments d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold"><i class="fa-solid fa-clipboard-list me-2 text-white-50"></i> Service Appointments
-            </h5>
-            <a th:href="@{/appointments/add}" class="btn btn-sm btn-light text-dark fw-bold rounded-1 px-3">
-                <i class="fa-solid fa-plus me-1"></i> Book Now
-            </a>
-        </div>
-        <div class="card-body p-0">
-
-            <div th:if="${#lists.isEmpty(appointments)}" class="p-5 text-center text-muted">
-                <i class="fa-solid fa-calendar-xmark fa-3x mb-3" style="opacity: 0.2;"></i>
-                <h5>No upcoming appointments</h5>
-                <p class="mb-0">You are all caught up!</p>
+        <div class="panel">
+            <div class="panel-head">
+                <h2><i class="fa-solid fa-calendar-check"></i> Service Appointments</h2>
+                <a th:href="@{/appointments/add}" class="btn btn-brand btn-sm px-3 py-2">
+                    <i class="fa-solid fa-plus me-1"></i> Book Now
+                </a>
             </div>
 
-            <div class="table-responsive" th:if="${!#lists.isEmpty(appointments)}">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+            <div th:if="${#lists.isEmpty(appointments)}" class="empty">
+                <i class="fa-solid fa-calendar-day"></i>
+                <h3>No upcoming appointments</h3>
+                <p>You are all caught up!</p>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(appointments)}" class="table-responsive">
+                <table class="table table-drive align-middle">
+                    <thead>
                     <tr>
-                        <th>Date & Time</th>
+                        <th>Date &amp; Time</th>
                         <th>Vehicle</th>
                         <th>Service</th>
                         <th>Status</th>
-                        <th class="text-end pe-4">Action</th>
+                        <th class="text-end">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="app : ${appointments}">
-                        <td class="fw-bold text-dark"
+                        <td class="fw-bold"
                             th:text="${#temporals.format(app.appointmentDate, 'dd-MMM-yyyy HH:mm')}">09-Jun-2026 13:30
                         </td>
-                        <td th:text="${app.vehicleInfo}" class="fw-semibold text-secondary">Mazda 3 (PB1234PK)</td>
-                        <td><span class="fw-bold" style="color: #457b9d;"><i class="fa-solid fa-wrench me-2"></i>[[${app.serviceName}]]</span>
-                        </td>
-
+                        <td class="text-muted-2" th:text="${app.vehicleInfo}">Mazda 3 (PB1234PK)</td>
+                        <td th:text="${app.serviceName}">Full Inspection</td>
                         <td>
-                            <span th:if="${app.status.name() == 'PENDING'}"
-                                  class="badge bg-warning text-dark px-3 py-2 rounded-1 shadow-sm"><i
-                                    class="fa-regular fa-clock me-1"></i> PENDING</span>
-                            <span th:if="${app.status.name() == 'APPROVED'}"
-                                  class="badge bg-info text-dark px-3 py-2 rounded-1 shadow-sm"><i
-                                    class="fa-solid fa-thumbs-up me-1"></i> APPROVED</span>
+                            <span th:if="${app.status.name() == 'PENDING'}" class="chip chip-pending">Pending</span>
+                            <span th:if="${app.status.name() == 'APPROVED'}" class="chip chip-approved">Approved</span>
                             <span th:if="${app.status.name() == 'COMPLETED'}"
-                                  class="badge bg-success px-3 py-2 rounded-1 shadow-sm"><i
-                                    class="fa-solid fa-check-double me-1"></i> COMPLETED</span>
+                                  class="chip chip-completed">Completed</span>
                             <span th:if="${app.status.name() == 'CANCELLED'}"
-                                  class="badge bg-danger px-3 py-2 rounded-1 shadow-sm"><i
-                                    class="fa-solid fa-ban me-1"></i> CANCELLED</span>
+                                  class="chip chip-cancelled">Cancelled</span>
                         </td>
-
-                        <td class="text-end pe-4 action-buttons">
+                        <td class="text-end">
                             <form th:if="${app.status.name() == 'PENDING'}"
                                   th:action="@{/appointments/cancel/{id}(id=${app.id})}"
-                                  th:method="POST">
-                                <button type="submit" class="btn btn-sm btn-outline-danger fw-bold rounded-1 px-3"
+                                  th:method="POST" class="m-0 d-inline">
+                                <button type="submit" class="btn btn-ghost btn-sm px-3 py-2"
                                         onclick="return confirm('Cancel this appointment?')">
                                     Cancel
                                 </button>
                             </form>
-                            <span th:if="${app.status.name() != 'PENDING'}" class="text-muted small fst-italic">No actions</span>
+                            <span th:if="${app.status.name() != 'PENDING'}" class="text-muted-2 small fst-italic">No actions</span>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,49 +13,121 @@
           rel="stylesheet">
 
     <style>
+        :root {
+            --bg: #08090c;
+            --surface: #12141b;
+            --surface-2: #171a23;
+            --line: rgba(255, 255, 255, .08);
+            --line-strong: rgba(255, 255, 255, .16);
+            --txt: #eef1f6;
+            --muted: #8b93a4;
+            --brand: #e63946;
+            --brand-2: #d90429;
+            --warning: #ffc107;
+            --radius: 18px;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #444a60 0%, #2f3446 100%);
-            color: #edf2f4;
+            background-color: var(--bg);
+            background-image: radial-gradient(900px 500px at 12% -10%, rgba(230, 57, 70, .16), transparent 60%),
+            radial-gradient(800px 480px at 92% 4%, rgba(217, 4, 41, .10), transparent 60%);
+            background-attachment: fixed;
+            color: var(--txt);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        .navbar {
-            background-color: #1a1c23 !important;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        .navbar-drive {
+            background: rgba(8, 9, 12, .72);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line);
+            padding: .9rem 0;
         }
 
-        .navbar-brand {
+        .navbar-drive .navbar-brand {
             font-weight: 900;
-            letter-spacing: 1.5px;
-            font-size: 1.8rem;
-            color: #ffffff !important;
-            text-decoration: none;
+            letter-spacing: .22em;
+            font-size: 1.35rem;
+            color: #fff !important;
+            background: linear-gradient(90deg, #fff 40%, var(--brand));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar-drive .nav-link {
+            color: var(--muted) !important;
+            font-weight: 600;
+            font-size: .86rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            padding: .5rem .9rem !important;
+            border-radius: 999px;
+            transition: .22s ease;
+        }
+
+        .navbar-drive .nav-link:hover {
+            color: #fff !important;
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1) grayscale(1);
         }
 
         .brand-highlight {
+            color: var(--brand);
+        }
+
+        .btn-ghost-warning {
+            border: 1px solid rgba(255, 193, 7, 0.4);
+            color: #ffc107;
+            background: rgba(255, 193, 7, 0.05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost-warning:hover {
+            background: rgba(255, 193, 7, 0.15);
+            color: #fff;
+            border-color: #ffc107;
+        }
+
+        .btn-ghost-danger {
+            border: 1px solid rgba(230, 57, 70, 0.4);
             color: #e63946;
+            background: rgba(230, 57, 70, 0.05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost-danger:hover {
+            background: rgba(230, 57, 70, 0.15);
+            color: #fff;
+            border-color: #e63946;
         }
 
         .form-card {
-            background-color: #1a1c23;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(180deg, var(--surface-2), var(--surface));
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: 0 30px 60px -35px rgba(0, 0, 0, .9);
             overflow: hidden;
             margin-top: 40px;
             margin-bottom: 40px;
         }
 
         .form-header {
-            background-color: #1a1c23;
+            background: rgba(255, 255, 255, .02);
             color: #ffffff;
             padding: 25px 30px;
-            border-bottom: 4px solid #457b9d;
+            border-bottom: 1px solid var(--line);
             display: flex;
             align-items: center;
         }
@@ -64,6 +137,11 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-size: 1.2rem;
+        }
+
+        .form-header i {
+            color: var(--brand);
         }
 
         .form-body {
@@ -77,11 +155,11 @@
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #a0a5b5;
-            font-size: 0.85rem;
+            font-weight: 700;
+            color: #6c757d;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         input, select, textarea {
@@ -104,10 +182,10 @@
         }
 
         input:focus, select:focus, textarea:focus {
-            border-color: #457b9d;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.2);
             background-color: #35394a;
+            border-color: var(--brand);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
         }
 
         input::placeholder, textarea::placeholder {
@@ -119,12 +197,8 @@
             color: #ffffff;
         }
 
-        .empty-state-card {
-            background-color: rgba(230, 57, 70, 0.05);
-            border: 1px dashed rgba(230, 57, 70, 0.3);
-            border-radius: 8px;
-            padding: 40px 20px;
-            text-align: center;
+        .required-star {
+            color: var(--brand);
         }
 
         .error-message {
@@ -135,40 +209,107 @@
             font-weight: 600;
         }
 
-        .required-star {
-            color: #e63946;
+        .loyalty-box {
+            background: rgba(255, 193, 7, 0.05);
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            color: #ffffff;
+        }
+
+        .loyalty-points-count {
+            color: var(--warning);
+            font-size: 1.3rem;
+            font-weight: 900;
+        }
+
+        .custom-checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, .05);
+        }
+
+        .custom-checkbox-wrapper input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: var(--surface);
+            border: 2px solid var(--muted);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            margin: 0;
+            flex-shrink: 0;
+            padding: 0;
+        }
+
+        .custom-checkbox-wrapper input[type="checkbox"]:checked {
+            background-color: var(--brand);
+            border-color: var(--brand);
+        }
+
+        .custom-checkbox-wrapper input[type="checkbox"]:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 13px;
+        }
+
+        .custom-checkbox-wrapper label {
+            margin: 0;
+            color: #fff;
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
         }
 
         .btn-submit {
-            background-color: #457b9d;
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 999px;
+            padding: 14px 30px;
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 12px 30px -12px rgba(230, 57, 70, .8);
+        }
+
+        .btn-submit:hover {
+            background-color: #d90429;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px -14px rgba(230, 57, 70, .95);
+        }
+
+        .btn-cancel {
+            background-color: rgba(255, 255, 255, .03);
+            color: var(--txt);
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
             padding: 14px 30px;
             font-size: 1rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: background-color 0.3s ease;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn-submit:hover {
-            background-color: #1d3557;
-            color: white;
-        }
-
-        .btn-cancel {
-            background-color: transparent;
-            color: #a0a5b5;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            padding: 14px 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
+            transition: all 0.22s ease;
             text-decoration: none;
             display: inline-block;
             width: 100%;
@@ -177,26 +318,65 @@
         }
 
         .btn-cancel:hover {
-            background-color: rgba(255, 255, 255, 0.05);
+            background-color: rgba(255, 255, 255, .09);
             color: #ffffff;
+            border-color: rgba(255, 255, 255, .3);
+        }
+
+        .empty-state-card {
+            background-color: rgba(230, 57, 70, 0.05);
+            border: 1px dashed rgba(230, 57, 70, 0.3);
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
         }
 
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark py-3">
+<nav class="navbar navbar-expand-lg navbar-drive sticky-top">
     <div class="container-fluid px-4 px-lg-5">
-        <a class="navbar-brand" th:href="@{/}">
-            DRIVE<span class="brand-highlight">ON</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <a class="navbar-brand" th:href="@{/}">DRIVEON</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMainLogged">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
+
+        <div class="collapse navbar-collapse" id="navMainLogged">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
                 <li class="nav-item">
-                    <a class="nav-link text-light fw-bold" th:href="@{/}">My Garage</a>
+                    <a class="nav-link" th:href="@{/users/profile}">
+                        <i class="fa-solid fa-user me-1 text-warning"></i>
+                        <span class="fw-bold" sec:authentication="name">User</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">
+                        <i class="fa-solid fa-warehouse me-1 brand-highlight"></i> My Garage
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/appointments/add}">
+                        <i class="fa-solid fa-calendar-plus me-1 brand-highlight"></i> Book Service
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/vehicles/add}">
+                        <i class="fa-solid fa-car me-1 brand-highlight"></i> Add Vehicle
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-ghost-warning btn-sm px-3 py-2 mx-2" th:href="@{/admin/appointments}">
+                        <i class="fa-solid fa-shield-halved me-1"></i> Admin
+                    </a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <form th:action="@{/users/logout}" th:method="POST" class="m-0">
+                        <button type="submit" class="btn btn-ghost-danger btn-sm px-3 py-2">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -217,9 +397,9 @@
                 <div th:if="${#lists.isEmpty(userVehicles)}" class="empty-state-card">
                     <i class="fa-solid fa-car-side fa-3x mb-3 text-white-50"></i>
                     <h5 class="text-white mb-2">Your Garage is Empty</h5>
-                    <p class="text-muted mb-4">You need to add a vehicle to your garage before booking an
-                        appointment.</p>
-                    <a th:href="@{/vehicles/add}" class="btn btn-outline-light fw-bold px-4 py-2">
+                    <p class="text-light mb-4" style="font-size: 0.95rem; opacity: 0.9;">You need to add a vehicle to
+                        your garage before booking an appointment.</p>
+                    <a th:href="@{/vehicles/add}" class="btn-cancel px-4 py-2" style="width: auto;">
                         <i class="fa-solid fa-plus me-2"></i> Add Vehicle Now
                     </a>
                 </div>
@@ -268,24 +448,26 @@
                                   placeholder="E.g. Check the brakes, they are squeaking..."></textarea>
                     </div>
 
-                    <div class="form-group mb-3" th:if="${availablePoints != null && availablePoints > 0}">
-                        <div class="alert alert-info">
-                            <p class="mb-2">
-                                Имате налични <strong><span th:text="${availablePoints}"></span></strong> точки в
-                                профила си.
-                            </p>
-
-                            <div class="form-check" th:if="${availablePoints >= 20}">
-                                <input class="form-check-input" type="checkbox" id="useLoyaltyPoints"
-                                       th:field="*{useLoyaltyPoints}">
-                                <label class="form-check-label" for="useLoyaltyPoints">
-                                    Използвай 20 точки за отстъпка
-                                </label>
+                    <div th:if="${availablePoints != null && availablePoints > 0}" class="loyalty-box">
+                        <div class="d-flex align-items-center">
+                            <i class="fa-solid fa-award fa-2x me-3 text-warning"></i>
+                            <div>
+                                <span class="text-white-50 text-uppercase"
+                                      style="font-size: 0.75rem; letter-spacing: 1px; font-weight: 700;">Loyalty Club</span>
+                                <p class="mb-0 mt-1">You have <span class="loyalty-points-count"
+                                                                    th:text="${availablePoints}"></span> available
+                                    points in your profile.</p>
                             </div>
+                        </div>
 
-                            <div class="text-danger small" th:if="${availablePoints < 20}">
-                                <em>Нужни са поне 20 точки, за да активирате отстъпка.</em>
-                            </div>
+                        <div class="custom-checkbox-wrapper" th:if="${availablePoints >= 20}">
+                            <input type="checkbox" id="useLoyaltyPoints" th:field="*{useLoyaltyPoints}">
+                            <label for="useLoyaltyPoints">Use 20 points for a discount on this service</label>
+                        </div>
+
+                        <div class="text-danger small mt-3 d-flex align-items-center" th:if="${availablePoints < 20}">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i>
+                            <em>At least 20 points are required to activate a discount.</em>
                         </div>
                     </div>
 

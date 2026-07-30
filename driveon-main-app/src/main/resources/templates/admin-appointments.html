@@ -1,158 +1,414 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - All Appointments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard - DriveOn Motors</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
     <style>
+        :root {
+            --bg: #08090c;
+            --surface: #12141b;
+            --surface-2: #171a23;
+            --line: rgba(255, 255, 255, .08);
+            --line-strong: rgba(255, 255, 255, .16);
+            --txt: #eef1f6;
+            --muted: #8b93a4;
+            --brand: #e63946;
+            --brand-2: #d90429;
+            --radius: 18px;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
-            background-color: #f8f9fa;
-        }
-
-        .header-banner {
-            background-color: #ffc107;
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 3px solid #e0a800;
-        }
-
-        .header-banner h1 {
-            margin: 0;
-            color: #343a40;
-            font-size: 32px;
-        }
-
-        .header-banner p {
-            margin: 10px 0 0 0;
-            color: #495057;
-            font-size: 16px;
-        }
-
-        .main-content {
-            margin: 30px;
-        }
-
-        .top-actions {
+            padding: 0;
+            background-color: var(--bg);
+            background-image: radial-gradient(900px 500px at 12% -10%, rgba(230, 57, 70, .16), transparent 60%),
+            radial-gradient(800px 480px at 92% 4%, rgba(217, 4, 41, .10), transparent 60%);
+            background-attachment: fixed;
+            color: var(--txt);
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+        }
+
+        .navbar-drive {
+            background: rgba(8, 9, 12, .72);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line);
+            padding: .9rem 0;
+        }
+
+        .navbar-drive .navbar-brand {
+            font-weight: 900;
+            letter-spacing: .22em;
+            font-size: 1.35rem;
+            color: #fff !important;
+            background: linear-gradient(90deg, #fff 40%, var(--brand));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar-drive .nav-link {
+            color: var(--muted) !important;
+            font-weight: 600;
+            font-size: .86rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            padding: .5rem .9rem !important;
+            border-radius: 999px;
+            transition: .22s ease;
+        }
+
+        .navbar-drive .nav-link:hover {
+            background: rgba(255, 255, 255, .06);
+            color: #fff !important;
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1) grayscale(1);
+        }
+
+        .brand-highlight {
+            color: var(--brand);
+        }
+
+        .btn-ghost-warning {
+            border: 1px solid rgba(255, 193, 7, 0.4);
+            color: #ffc107;
+            background: rgba(255, 193, 7, 0.05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost-warning:hover {
+            background: rgba(255, 193, 7, 0.15);
+            color: #fff;
+            border-color: #ffc107;
+        }
+
+        .btn-ghost-danger {
+            border: 1px solid rgba(230, 57, 70, 0.4);
+            color: #e63946;
+            background: rgba(230, 57, 70, 0.05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost-danger:hover {
+            background: rgba(230, 57, 70, 0.15);
+            color: #fff;
+            border-color: #e63946;
+        }
+
+        .panel {
+            background: linear-gradient(180deg, var(--surface-2), var(--surface));
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 30px 60px -35px rgba(0, 0, 0, .9);
+        }
+
+        .panel-head {
+            display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1.15rem 1.5rem;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, .02);
         }
 
-        .back-btn {
-            padding: 10px 15px;
-            background-color: #6c757d;
-            color: white;
+        .panel-head h2 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .panel-head h2 i {
+            color: #ffc107;
+        }
+
+        .table-drive {
+            margin: 0;
+            color: var(--txt);
+            --bs-table-bg: transparent;
+        }
+
+        .table-drive thead th {
+            color: var(--muted);
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--line) !important;
+            padding: .95rem 1.5rem;
+        }
+
+        .table-drive tbody td {
+            border-bottom: 1px solid var(--line);
+            padding: 1.05rem 1.5rem;
+            vertical-align: middle;
+            font-weight: 500;
+            color: var(--txt);
+        }
+
+        .table-drive tbody tr:hover td {
+            background: rgba(255, 255, 255, .035);
+        }
+
+        .table-drive tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .text-muted-2 {
+            color: var(--muted) !important;
+        }
+
+        .btn-ghost {
+            border: 1px solid var(--line-strong);
+            color: var(--txt);
+            background: rgba(255, 255, 255, .03);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            padding: 8px 20px;
         }
 
-        .user-mng-btn {
-            padding: 10px 15px;
-            background-color: #343a40;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, .09);
+            color: #fff;
+            border-color: rgba(255, 255, 255, .3);
         }
 
-        .user-mng-btn:hover {
-            background-color: #23272b;
+        .btn-ghost-success {
+            border: 1px solid rgba(61, 220, 151, .4);
+            color: #3ddc97;
+            background: rgba(61, 220, 151, .05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        .btn-ghost-success:hover {
+            background: rgba(61, 220, 151, .15);
+            color: #fff;
+            border-color: #3ddc97;
         }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
+        .btn-ghost-info {
+            border: 1px solid rgba(90, 169, 255, .4);
+            color: #5aa9ff;
+            background: rgba(90, 169, 255, .05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
         }
 
-        th {
-            background-color: #343a40;
-            color: white;
+        .btn-ghost-info:hover {
+            background: rgba(90, 169, 255, .15);
+            color: #fff;
+            border-color: #5aa9ff;
         }
 
-        tr:hover {
-            background-color: #f1f1f1;
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .32rem .8rem;
+            border-radius: 999px;
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            border: 1px solid transparent;
         }
+
+        .chip:before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .chip-pending {
+            color: #ffb020;
+            background: rgba(255, 176, 32, .12);
+            border-color: rgba(255, 176, 32, .3);
+        }
+
+        .chip-approved {
+            color: #3ddc97;
+            background: rgba(61, 220, 151, .12);
+            border-color: rgba(61, 220, 151, .3);
+        }
+
+        .chip-completed {
+            color: #5aa9ff;
+            background: rgba(90, 169, 255, .12);
+            border-color: rgba(90, 169, 255, .3);
+        }
+
+        .chip-cancelled {
+            color: #ff5f57;
+            background: rgba(255, 95, 87, .12);
+            border-color: rgba(255, 95, 87, .3);
+        }
+
     </style>
 </head>
 <body>
 
-<div class="header-banner">
-    <h1>Manager Dashboard: All Appointments</h1>
-    <p>Below is the list of all scheduled service appointments in the system.</p>
-</div>
+<nav class="navbar navbar-expand-lg navbar-drive sticky-top">
+    <div class="container-fluid px-4 px-lg-5">
+        <a class="navbar-brand" th:href="@{/}">DRIVEON</a>
 
-<div class="main-content">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMainLogged">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="top-actions">
-        <a th:href="@{/}" class="back-btn">&larr; Back to Home</a>
-        <a th:href="@{/admin/users}" class="user-mng-btn">User Management &rarr;</a>
+        <div class="collapse navbar-collapse" id="navMainLogged">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/users/profile}">
+                        <i class="fa-solid fa-user me-1 text-warning"></i>
+                        <span class="fw-bold" sec:authentication="name">Admin</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">
+                        <i class="fa-solid fa-warehouse me-1 brand-highlight"></i> My Garage
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/appointments/add}">
+                        <i class="fa-solid fa-calendar-plus me-1 brand-highlight"></i> Book Service
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/vehicles/add}">
+                        <i class="fa-solid fa-car me-1 brand-highlight"></i> Add Vehicle
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-ghost-warning btn-sm px-3 py-2 mx-2" th:href="@{/admin/appointments}">
+                        <i class="fa-solid fa-shield-halved me-1"></i> Admin
+                    </a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <form th:action="@{/users/logout}" th:method="POST" class="m-0">
+                        <button type="submit" class="btn btn-ghost-danger btn-sm px-3 py-2">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-5 flex-grow-1">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a th:href="@{/}" class="btn-ghost">
+            <i class="fa-solid fa-arrow-left me-2"></i> Home
+        </a>
+        <a th:href="@{/admin/users}" class="btn-ghost">
+            User Management <i class="fa-solid fa-arrow-right ms-2"></i>
+        </a>
     </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>Date & Time</th>
-            <th>Client & Vehicle</th>
-            <th>Service Type</th>
-            <th>Notes</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="app : ${allAppointments}">
-            <td th:text="${#temporals.format(app.appointmentDate, 'dd-MMM-yyyy HH:mm')}"
-                style="font-weight: bold;"></td>
-            <td th:text="${app.vehicleInfo}"></td>
-            <td th:text="${app.serviceName}"></td>
-            <td th:text="${app.notes ?: '-'}" style="max-width: 250px; font-style: italic; color: #555;"></td>
-            <td>
-                <span th:if="${app.status.name() == 'PENDING'}"
-                      style="background-color: #ffc107; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">PENDING</span>
-                <span th:if="${app.status.name() == 'APPROVED'}"
-                      style="background-color: #17a2b8; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">APPROVED</span>
-                <span th:if="${app.status.name() == 'COMPLETED'}"
-                      style="background-color: #28a745; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">COMPLETED</span>
-                <span th:if="${app.status.name() == 'CANCELLED'}"
-                      style="background-color: #dc3545; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">CANCELLED</span>
-            </td>
-            <td>
-                <form th:if="${app.status.name() == 'PENDING'}"
-                      th:action="@{/admin/appointments/approve/{id}(id=${app.id})}"
-                      th:method="POST" style="display:inline;">
-                    <button type="submit"
-                            style="background-color: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 12px;">
-                        Approve
-                    </button>
-                </form>
+    <div class="panel">
+        <div class="panel-head">
+            <h2><i class="fa-solid fa-clipboard-list"></i> Manager Dashboard: All Appointments</h2>
+        </div>
 
-                <form th:if="${app.status.name() == 'APPROVED'}"
-                      th:action="@{/admin/appointments/complete/{id}(id=${app.id})}"
-                      th:method="POST" style="display:inline;">
-                    <button type="submit"
-                            style="background-color: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 12px;">
-                        Complete
-                    </button>
-                </form>
-            </td>
-        </tr>
-        <tr th:if="${#lists.isEmpty(allAppointments)}">
-            <td colspan="6" style="text-align: center; color: #6c757d;">No appointments found in the system.</td>
-        </tr>
-        </tbody>
-    </table>
+        <div class="table-responsive">
+            <table class="table table-drive align-middle">
+                <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Client & Vehicle</th>
+                    <th>Service Type</th>
+                    <th>Notes</th>
+                    <th>Status</th>
+                    <th class="text-end pe-4">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="app : ${allAppointments}">
+                    <td class="fw-bold text-white"
+                        th:text="${#temporals.format(app.appointmentDate, 'dd-MMM-yyyy HH:mm')}"></td>
+                    <td class="text-muted-2" th:text="${app.vehicleInfo}"></td>
+                    <td class="text-white" th:text="${app.serviceName}"></td>
+
+                    <td class="text-muted-2"
+                        style="max-width: 250px; font-style: italic; font-size: 0.9rem; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;"
+                        th:text="${app.notes ?: '-'}"></td>
+
+                    <td>
+                        <span th:if="${app.status.name() == 'PENDING'}" class="chip chip-pending">Pending</span>
+                        <span th:if="${app.status.name() == 'APPROVED'}" class="chip chip-approved">Approved</span>
+                        <span th:if="${app.status.name() == 'COMPLETED'}" class="chip chip-completed">Completed</span>
+                        <span th:if="${app.status.name() == 'CANCELLED'}" class="chip chip-cancelled">Cancelled</span>
+                    </td>
+
+                    <td class="text-end pe-3">
+                        <form th:if="${app.status.name() == 'PENDING'}"
+                              th:action="@{/admin/appointments/approve/{id}(id=${app.id})}"
+                              th:method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-ghost-success btn-sm px-3 py-1">
+                                Approve
+                            </button>
+                        </form>
+
+                        <form th:if="${app.status.name() == 'APPROVED'}"
+                              th:action="@{/admin/appointments/complete/{id}(id=${app.id})}"
+                              th:method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-ghost-info btn-sm px-3 py-1">
+                                Complete
+                            </button>
+                        </form>
+
+                        <span th:if="${app.status.name() == 'COMPLETED' or app.status.name() == 'CANCELLED'}"
+                              class="text-muted-2 small fst-italic">No actions</span>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(allAppointments)}">
+                    <td colspan="6" class="text-center py-5 text-muted">No appointments found in the system.</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

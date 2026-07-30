@@ -13,6 +13,15 @@
           rel="stylesheet">
 
     <style>
+        :root {
+            --bg: #08090c;
+            --line: rgba(255, 255, 255, .08);
+            --line-strong: rgba(255, 255, 255, .16);
+            --muted: #8b93a4;
+            --brand: #e63946;
+            --brand-2: #d90429;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
             margin: 0;
@@ -21,19 +30,77 @@
             overflow-y: scroll;
         }
 
-        .navbar {
-            background-color: #1a1c23 !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        .navbar-drive {
+            background: rgba(8, 9, 12, .72);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--line);
+            padding: .9rem 0;
         }
 
-        .navbar-brand {
+        .navbar-drive .navbar-brand {
             font-weight: 900;
-            letter-spacing: 0.1rem;
-            font-size: 1.8rem;
-            color: #ffffff !important;
+            letter-spacing: .22em;
+            font-size: 1.35rem;
+            color: #fff !important;
+            background: linear-gradient(90deg, #fff 40%, var(--brand));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .brand-highlight { color: #e63946; }
+        .navbar-drive .nav-link {
+            color: var(--muted) !important;
+            font-weight: 600;
+            font-size: .86rem;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            padding: .5rem .9rem !important;
+            border-radius: 999px;
+            transition: .22s ease;
+        }
+
+        .navbar-drive .nav-link:hover {
+            color: #fff !important;
+            background: rgba(255, 255, 255, .06);
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1) grayscale(1);
+        }
+
+        .brand-highlight {
+            color: var(--brand);
+        }
+
+        .btn-ghost-warning {
+            border: 1px solid rgba(255, 193, 7, 0.4);
+            color: #ffc107;
+            background: rgba(255, 193, 7, 0.05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost-warning:hover {
+            background: rgba(255, 193, 7, 0.15);
+            color: #fff;
+            border-color: #ffc107;
+        }
+
+        .btn-ghost-danger {
+            border: 1px solid rgba(230, 57, 70, 0.4);
+            color: #e63946;
+            background: rgba(230, 57, 70, 0.05);
+            font-weight: 700;
+            border-radius: 999px !important;
+            transition: .22s ease;
+        }
+
+        .btn-ghost-danger:hover {
+            background: rgba(230, 57, 70, 0.15);
+            color: #fff;
+            border-color: #e63946;
+        }
 
         .dark-profile-panel {
             background-color: #1a1c23;
@@ -72,7 +139,10 @@
             align-items: center;
         }
 
-        .info-group { margin-bottom: 20px; }
+        .info-group {
+            margin-bottom: 20px;
+        }
+
         .info-label {
             font-size: 0.75rem;
             color: #6c757d;
@@ -81,6 +151,7 @@
             font-weight: 700;
             margin-bottom: 5px;
         }
+
         .info-value {
             font-size: 1.1rem;
             color: #ffffff;
@@ -107,17 +178,25 @@
         }
 
         .btn-brand {
-            background-color: #e63946;
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
             color: white;
             border: none;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
             padding: 12px 20px;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             width: 100%;
+            border-radius: 999px !important;
+            box-shadow: 0 12px 30px -12px rgba(230, 57, 70, .8);
         }
-        .btn-brand:hover { background-color: #d90429; color: white; }
+
+        .btn-brand:hover {
+            background-color: #d90429;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 18px 40px -14px rgba(230, 57, 70, .95);
+        }
 
         .profile-image-container {
             background-image: linear-gradient(to right, rgba(26, 28, 35, 0.3) 0%, rgba(26, 28, 35, 0.7) 100%), url('/images/ProfileImg.png');
@@ -135,61 +214,60 @@
         }
 
         @media (max-width: 992px) {
-            .dark-profile-panel { padding: 2rem; box-shadow: none; }
-            .profile-image-container { min-height: 400px; display: none; }
+            .dark-profile-panel {
+                padding: 2rem;
+                box-shadow: none;
+            }
+
+            .profile-image-container {
+                min-height: 400px;
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-<nav class="navbar navbar-expand-lg navbar-dark pb-3 pt-3">
+<nav class="navbar navbar-expand-lg navbar-drive sticky-top">
     <div class="container-fluid px-4 px-lg-5">
-        <a class="navbar-brand" th:href="@{/}">
-            DRIVE<span class="brand-highlight">ON</span>
-        </a>
+        <a class="navbar-brand" th:href="@{/}">DRIVEON</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMainLogged">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-
-                <li class="nav-item me-4">
-                    <a class="nav-link text-light" th:href="@{/users/profile}">
+        <div class="collapse navbar-collapse" id="navMainLogged">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/users/profile}">
                         <i class="fa-solid fa-user me-1 text-warning"></i>
                         <span class="fw-bold" th:text="${userProfile.username}">User</span>
                     </a>
                 </li>
-
-                <li class="nav-item me-3">
-                    <a class="nav-link text-light" th:href="@{/}">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">
                         <i class="fa-solid fa-warehouse me-1 brand-highlight"></i> My Garage
                     </a>
                 </li>
-
-                <li class="nav-item me-2">
-                    <a class="nav-link text-light" th:href="@{/appointments/add}">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/appointments/add}">
                         <i class="fa-solid fa-calendar-plus me-1 brand-highlight"></i> Book Service
                     </a>
                 </li>
-
                 <li class="nav-item">
-                    <a class="nav-link text-light" th:href="@{/vehicles/add}">
+                    <a class="nav-link" th:href="@{/vehicles/add}">
                         <i class="fa-solid fa-car me-1 brand-highlight"></i> Add Vehicle
                     </a>
                 </li>
-
-                <li class="nav-item ms-3" sec:authorize="hasRole('ADMIN')">
-                    <a class="btn btn-outline-warning btn-sm fw-bold px-3 py-2" th:href="@{/admin/appointments}">
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-ghost-warning btn-sm px-3 py-2 mx-2" th:href="@{/admin/appointments}">
                         <i class="fa-solid fa-shield-halved me-1"></i> Admin
                     </a>
                 </li>
-
-                <li class="nav-item ms-3">
+                <li class="nav-item ms-lg-2">
                     <form th:action="@{/users/logout}" th:method="POST" class="m-0">
-                        <button type="submit" class="btn btn-outline-danger btn-sm fw-bold px-3 py-1 rounded-1">
+                        <button type="submit" class="btn btn-ghost-danger btn-sm px-3 py-2">
                             <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
                         </button>
                     </form>
@@ -222,7 +300,8 @@
 
                 <div class="info-group">
                     <div class="info-label">Full Name</div>
-                    <div class="info-value" th:text="${userProfile.firstName + ' ' + userProfile.lastName}">John Doe</div>
+                    <div class="info-value" th:text="${userProfile.firstName + ' ' + userProfile.lastName}">John Doe
+                    </div>
                 </div>
 
                 <div class="info-group mb-4">
@@ -230,7 +309,7 @@
                     <div class="info-value" th:text="${userProfile.phoneNumber}">+123456789</div>
                 </div>
 
-                <a th:href="@{/users/profile/edit}" class="btn btn-brand rounded-1">
+                <a th:href="@{/users/profile/edit}" class="btn btn-brand">
                     <i class="fa-solid fa-pen-to-square me-2"></i> Edit Profile
                 </a>
 
@@ -253,7 +332,8 @@
                             <i class="fa-solid fa-circle-info me-1 text-warning"></i> How it works
                         </div>
                         <p class="text-white-50 mb-0" style="font-size: 0.8rem; line-height: 1.4;">
-                            You earn points for every completed service. At your next booking, your points are converted into a discount (e.g., 100 points = €10 off). No extra steps required!
+                            You earn points for every completed service. At your next booking, your points are converted
+                            into a discount (e.g., 100 points = €10 off). No extra steps required!
                         </p>
                     </div>
                 </div>

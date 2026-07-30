@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - DriveOn Motors</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -99,7 +100,7 @@
             background-color: #1a1c23;
             position: relative;
             z-index: 10;
-            box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.5);
             overflow-y: auto;
         }
 
@@ -112,13 +113,19 @@
             font-weight: 900;
             letter-spacing: 1.5px;
             font-size: 2rem;
-            color: #ffffff;
             text-decoration: none;
             display: block;
             text-align: center;
             margin-bottom: 30px;
+            background: linear-gradient(90deg, #fff 40%, #e63946);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .brand-highlight { color: #e63946; }
+
+        .brand-highlight {
+            color: #e63946;
+        }
 
         h2 {
             color: #ffffff;
@@ -128,7 +135,9 @@
             font-size: 1.5rem;
         }
 
-        .form-group { margin-bottom: 15px; }
+        .form-group {
+            margin-bottom: 15px;
+        }
 
         label {
             display: block;
@@ -159,7 +168,9 @@
             background-color: #35394a;
         }
 
-        input::placeholder { color: #6c757d; }
+        input::placeholder {
+            color: #6c757d;
+        }
 
         .global-error {
             background-color: rgba(220, 53, 69, 0.1);
@@ -190,7 +201,9 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        .btn-submit:hover { background-color: #d90429; }
+        .btn-submit:hover {
+            background-color: #d90429;
+        }
 
         .login-link {
             display: block;
@@ -203,13 +216,31 @@
             transition: color 0.3s ease;
         }
 
-        .login-link:hover { color: #ffffff; }
-        .login-link span { color: #e63946; font-weight: 700; }
+        .login-link:hover {
+            color: #ffffff;
+        }
+
+        .login-link span {
+            color: #e63946;
+            font-weight: 700;
+        }
 
         @media (max-width: 992px) {
-            .split-layout { flex-direction: column; }
-            .form-side { flex: 0 0 100%; max-width: 100%; width: 100%; box-shadow: none; min-height: 100vh;}
-            .image-side { display: none; }
+            .split-layout {
+                flex-direction: column;
+            }
+
+            .form-side {
+                flex: 0 0 100%;
+                max-width: 100%;
+                width: 100%;
+                box-shadow: none;
+                min-height: 100vh;
+            }
+
+            .image-side {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -250,7 +281,7 @@
     <div class="form-side">
         <div class="form-container">
 
-            <a href="/" class="brand-logo">DRIVE<span class="brand-highlight">ON</span></a>
+            <a href="/" class="brand-logo">DRIVEON</a>
 
             <h2>Create Account</h2>
 
@@ -263,43 +294,52 @@
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" th:field="*{username}" placeholder="Choose a username"/>
-                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
+                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+                           style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
                 </div>
 
                 <div class="form-group">
                     <label for="firstName">First Name</label>
                     <input type="text" id="firstName" th:field="*{firstName}" placeholder="Enter your first name"/>
-                    <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
+                    <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+                           style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
                 </div>
 
                 <div class="form-group">
                     <label for="lastName">Last Name</label>
                     <input type="text" id="lastName" th:field="*{lastName}" placeholder="Enter your last name"/>
-                    <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
+                    <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+                           style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
                 </div>
 
                 <div class="form-group">
                     <label for="phoneNumber">Phone Number</label>
-                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" placeholder="Enter your phone number"/>
-                    <small th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
+                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}"
+                           placeholder="Enter your phone number"/>
+                    <small th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"
+                           style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input type="email" id="email" th:field="*{email}" placeholder="Enter your email"/>
-                    <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
+                    <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                           style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" th:field="*{password}" placeholder="Create a password"/>
-                    <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
+                    <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+                           style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
                 </div>
 
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" th:field="*{confirmPassword}" placeholder="Repeat your password"/>
-                    <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
+                    <input type="password" id="confirmPassword" th:field="*{confirmPassword}"
+                           placeholder="Repeat your password"/>
+                    <small th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+                           style="color: #ff6b6b; display: block; margin-top: 5px; font-size: 0.85rem; font-weight: 600;"></small>
                 </div>
 
                 <button type="submit" class="btn-submit">Register</button>
