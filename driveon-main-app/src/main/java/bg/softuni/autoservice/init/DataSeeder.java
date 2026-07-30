@@ -53,7 +53,6 @@ public class DataSeeder implements CommandLineRunner {
 
             serviceTypeRepository.saveAll(List.of(diagnostics, maintenance, repair, inspection));
         }
-
         if (userRepository.count() == 0) {
 
             User regularUser = User.builder()
@@ -61,14 +60,19 @@ public class DataSeeder implements CommandLineRunner {
                     .email("user@autoservice.com")
                     .password(passwordEncoder.encode("12345"))
                     .role(bg.softuni.autoservice.model.enums.UserRole.USER)
+                    .firstName("John")
+                    .lastName("Doe")
+                    .phoneNumber("0888123456")
                     .build();
 
             User adminUser = User.builder()
                     .username("admin")
                     .email("admin@autoservice.com")
                     .password(passwordEncoder.encode("12345"))
-
                     .role(bg.softuni.autoservice.model.enums.UserRole.ADMIN)
+                    .firstName("System")
+                    .lastName("Admin")
+                    .phoneNumber("0888654321")
                     .build();
 
             userRepository.saveAll(List.of(regularUser, adminUser));
